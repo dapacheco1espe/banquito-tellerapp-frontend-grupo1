@@ -1,0 +1,37 @@
+<div class="w-full h-full bg-white">
+    <main class="p-4">
+        <h2 class="font-bold text-3xl">Servicios</h2>
+        <p class="text-md text-gray-500">Selecciona una de los servicios que el cliente desea realizar en la agencia</p>
+    </main>
+    <div class="border-b"></div>
+
+    <div class="flex flex-col sm:flex-row gap-3 py-6 px-10">
+        <div class="w-1/3 h-32 flex flex-col gap-3 border rounded-md p-2 cursor-pointer" (click)="goToOperation('balance')">
+            <section class="w-full flex flex-col items-center gap-2">
+                <div class="rounded-full bg-gray-100 w-10 h-10 flex flex-row justify-center items-center">
+                    <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
+                </div>
+                <h2 class="font-bold text-2xl">Consulta de saldo</h2>
+                <p class="text-sm  text-gray-400">Consulta el saldo que tiene disponible una cuenta</p>
+            </section>
+        </div>
+        <div class="w-1/3 h-32 flex flex-col gap-3 border rounded-md p-2 cursor-pointer" (click)="goToOperation('movements')">
+            <section class="w-full flex flex-col items-center gap-2">
+                <div class="rounded-full bg-gray-100 w-10 h-10 flex flex-row justify-center items-center">
+                    <mat-icon svgIcon="heroicons_outline:search"></mat-icon>
+                </div>
+                <h2 class="font-bold text-2xl">Consulta de movimientos</h2>
+                <p class="text-sm  text-gray-400">Obten los movimientos de una cuenta en particular</p>
+            </section>
+        </div>
+        <div class="w-1/3 h-32 flex flex-col gap-3 border rounded-md p-2 cursor-pointer" (click)="goToOperation('transferences')">
+            <section class="w-full flex flex-col items-center gap-2">
+                <div class="rounded-full bg-gray-100 w-10 h-10 flex flex-row justify-center items-center">
+                    <mat-icon svgIcon="heroicons_outline:currency-dollar"></mat-icon>
+                </div>
+                <h2 class="font-bold text-2xl">Transferencias</h2>
+                <p class="text-sm  text-gray-400">Realiza transferencias bancarias de los clientes</p>
+            </section>
+        </div>
+    </div>
+</div>

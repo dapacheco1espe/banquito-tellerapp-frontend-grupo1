@@ -10,7 +10,7 @@ import { InitialDataResolver } from 'app/app.resolvers';
 export const appRoutes: Route[] = [
 
     // Redirect empty path to '/example'
-    {path: '', pathMatch : 'full', redirectTo: 'example'},
+    {path: '', pathMatch : 'full', redirectTo: 'employee'},
 
     // Redirect signed in user to the '/example'
     //
@@ -74,7 +74,8 @@ export const appRoutes: Route[] = [
             initialData: InitialDataResolver,
         },
         children   : [
-            {path: 'example', loadChildren: () => import('app/modules/admin/example/example.module').then(m => m.ExampleModule)},
+            {path: 'employee', loadChildren: () => import('app/modules/employee/employee.module').then(m => m.EmployeeModule)},
+            {path: 'client', loadChildren: () => import('app/modules/client/client.module').then(m => m.ClientModule)},
         ]
     }
 ];
