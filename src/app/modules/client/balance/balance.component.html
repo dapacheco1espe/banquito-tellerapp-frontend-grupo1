@@ -1,1 +1,31 @@
-<p>balance works!</p>
+<div class="w-full h-full bg-white">
+    <main class="p-4 px-10">
+        <h2 class="font-bold text-3xl">Consulta de saldo</h2>
+        <div class="text-md flex flex-row gap-3">
+            <a routerLink="/" class="text-primary">Teller App</a>
+            <span>/</span>
+            <a routerLink="/client/balance" class="text-gray-400">Consulta de saldo</a>
+        </div>
+    </main>
+    <div class="border-b"></div>
+    <div class="w-full flex flex-col sm:flex-row gap-3 py-6 px-10">
+        <!-- busquedas por cuenta o por cedula -->
+        <form [formGroup]="formClient" class="w-full flex flex-col  sm:flex-row gap-4">
+            <div class="w-full">
+                <mat-form-field class="w-full">
+                    <mat-label>Numero de cuenta del cliente</mat-label>
+                    <input matInput type="number" step="1" [formControlName]="'accountNumber'">
+                </mat-form-field>
+            </div>
+            <div class="w-full">
+                <mat-form-field class="w-full">
+                    <mat-label>Numero de Cédula o RUC del cliente</mat-label>
+                    <input matInput type="number" step="1" [formControlName]="'clientId'">
+                </mat-form-field>
+                <mat-error *ngIf="formClient.get('clientId').invalid">
+                    Ingrese una cedula o RUC valida
+                </mat-error>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 import { BalanceRoutingModule } from './balance-routing.module';
 import { BalanceComponent } from './balance.component';
 import { SharedModule } from 'app/shared/shared.module';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 
 
 @NgModule({
@@ -12,7 +14,11 @@ import { SharedModule } from 'app/shared/shared.module';
   ],
   imports: [
     SharedModule,
-    BalanceRoutingModule
+    BalanceRoutingModule,
+    MatInputModule,
+    MatFormFieldModule,
+    FormsModule,
+    ReactiveFormsModule,
   ]
 })
 export class BalanceModule { }
