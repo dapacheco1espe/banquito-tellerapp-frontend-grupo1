@@ -1,1 +1,31 @@
-<p>movements works!</p>
+<h1 class="text-2xl font-bold mb-4">Consulta de Movimientos</h1><br>
+
+<form class="mb-8" (ngSubmit)="realizarConsulta()">
+  <div class="mb-4">
+    <br><br><br><label for="fechaInicio" class="block text-gray-700 font-bold mb-1">Fecha de inicio:</label>
+    <input type="date" id="fechaInicio" name="fechaInicio" [(ngModel)]="fechaInicio" required
+      class="px-4 py-2 border border-gray-300 rounded">
+  </div>
+  <div class="mb-4">
+    <label for="fechaFin" class="block text-gray-700 font-bold mb-1">Fecha de fin:</label>
+    <input type="date" id="fechaFin" name="fechaFin" [(ngModel)]="fechaFin" required
+      class="px-4 py-2 border border-gray-300 rounded">
+  </div>
+  <button type="submit" class="px-4 py-2 bg-blue-500 text-white font-bold rounded" (click)="realizarConsulta()">Consultar Movimientos</button>
+
+  <div *ngIf="movimientos && mostrarDesglose">
+    <h2 class="text-xl font-bold mb-4">Resultados de la consulta</h2>
+    <ul class="list-disc pl-8">
+      <li *ngFor="let movimiento of movimientos" class="mb-4">
+        <p class="font-bold">{{ movimiento.descripcion }}</p>
+        <ul class="ml-8">
+          <li>Fecha: {{ movimiento.fecha }}</li>
+          <li>Monto: {{ movimiento.monto }}</li>
+          <li>Concepto: {{ movimiento.concepto }}</li>
+          <!-- Agrega aquí más propiedades de desglose si las tienes -->
+        </ul>
+      </li>
+    </ul>
+  </div>
+</form>
+
