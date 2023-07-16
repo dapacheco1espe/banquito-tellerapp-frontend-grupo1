@@ -13,6 +13,10 @@ const routes: Routes = [
   {
     path: 'transferences',
     loadChildren: () => import('./transferences/transferences.module') .then(m => m.TransferencesModule),
+  },
+  {
+    path: 'withdraw',
+    loadChildren: () => import('./withdraw/withdraw.module') .then(m => m.WithdrawModule),
   }
 ];
 

@@ -13,7 +13,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public goToOperation(operation: 'balance' | 'movements' | 'transferences'){
+  public goToOperation(operation: 'balance' | 'movements' | 'transferences' | 'withdraw'){
     this._router.navigateByUrl(`/client/${operation}`);
   }
 }
