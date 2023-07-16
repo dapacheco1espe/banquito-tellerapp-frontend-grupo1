@@ -30,8 +30,8 @@
         </form>
         <!-- response of account Balance -->
         <ng-container *ngIf="(account$ | async) as account">
-            <div class="flex flex-row w-full justify-center">
-                <section class="flex flex-col items-center w-full sm:w-1/2 p-2 border rounded-md gap-3">
+            <div class="flex flex-row w-full justify-center mt-4" id="balancePdf">
+                <section class="flex flex-col items-center w-full sm:w-1/2 p-2 border rounded-md gap-3" >
                     <h2 class="text-2xl font-bold mb-4">Nro. Cuenta {{account.accountNumber}}</h2>
                     <div class="w-full grid grid-cols-2">
                         <span class="font-semibold text-center">Propietario: </span>
@@ -53,7 +53,10 @@
                         <span class="font-semibold text-center">Fecha de consulta: </span>
                         <span class="text-center">{{currentDate}}</span>
                     </div>
-                    <button mat-flat-button color="primary">Imprimir Comprobante</button>
+                    <button
+                    class="hidden md:block mt-4"
+                    data-html2canvas-ignore="true"
+                    mat-flat-button color="primary" (click)="downloadAsPdf();">Imprimir Comprobante</button>
                 </section>
             </div>
         </ng-container>
