@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MovementsService } from './movements.service';
+import { Movimiento } from './movimiento.model';
 
 @Component({
   selector: 'app-movements',
@@ -9,7 +10,8 @@ import { MovementsService } from './movements.service';
 export class MovementsComponent {
   fechaInicio: string;
   fechaFin: string;
-  movimientos: any[];
+  //movimientos: any[];
+  movimientos: Movimiento[];
   mostrarDesglose: boolean;
 
   constructor(private movementsService: MovementsService) { }
@@ -19,20 +21,9 @@ export class MovementsComponent {
       this.movimientos = []; // Reiniciar la lista de movimientos
       this.mostrarDesglose = false; // Ocultar el formulario de desglose
 
-      // Verificar que las fechas de inicio y fin están presentes
-      if (this.fechaInicio && this.fechaFin) {
-        this.movementsService.obtenerMovimientos(this.fechaInicio, this.fechaFin).subscribe(
-          (response) => {
-            this.movimientos = response;
-            this.mostrarDesglose = true; // Mostrar el formulario de desglose
-          },
-          (error) => {
-            console.error(error);
-          }
-        );
-      }
+      // Obtener los movimientos simulados del servicio
+      this.movimientos = this.movementsService.obtenerMovimientosMock(this.fechaInicio, this.fechaFin);
+      this.mostrarDesglose = true; // Mostrar el formulario de desglose
     }
   }
-
-
 }

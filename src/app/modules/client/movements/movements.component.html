@@ -13,19 +13,30 @@
   </div>
   <button type="submit" class="px-4 py-2 bg-blue-500 text-white font-bold rounded" (click)="realizarConsulta()">Consultar Movimientos</button>
 
-  <div *ngIf="movimientos && mostrarDesglose">
-    <h2 class="text-xl font-bold mb-4">Resultados de la consulta</h2>
-    <ul class="list-disc pl-8">
-      <li *ngFor="let movimiento of movimientos" class="mb-4">
-        <p class="font-bold">{{ movimiento.descripcion }}</p>
-        <ul class="ml-8">
-          <li>Fecha: {{ movimiento.fecha }}</li>
-          <li>Monto: {{ movimiento.monto }}</li>
-          <li>Concepto: {{ movimiento.concepto }}</li>
-          <!-- Agrega aquí más propiedades de desglose si las tienes -->
-        </ul>
-      </li>
-    </ul>
-  </div>
+  
 </form>
+
+<!-- Mostrar el formulario de detalles de movimientos si se ha realizado una consulta -->
+<form class="mb-8">
+  <div *ngIf="mostrarDesglose">
+    <br><br><br><h2>Resultados de la consulta:</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Descripción</th>
+          <th>Monto</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let movimiento of movimientos">
+          <td>{{ movimiento.fecha }}</td>
+          <td>{{ movimiento.descripcion }}</td>
+          <td>{{ movimiento.monto }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div> 
+</form>
+
 

@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TransferencesComponent } from './transferences.component';
+import { RetiroComponent } from './retiro.component';
 
 const routes: Routes = [
   {
     path:'',
-    component: TransferencesComponent,
+    component: RetiroComponent,
   }
 ];
 

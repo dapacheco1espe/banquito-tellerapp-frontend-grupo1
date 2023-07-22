@@ -1,19 +1,22 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Movimiento } from './movimiento.model';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class MovementsService {
-  private apiUrl = 'https://api.example.com/movimientos'; // Reemplaza con la URL de tu API
 
-  constructor(private http: HttpClient) {}
+  obtenerMovimientosMock(fechaInicio: string, fechaFin: string): Movimiento[] {
+    // Aquí puedes retornar los datos simulados de mockapi
+    const movimientosMock = [
+      { id: 1, fecha: '2023-07-20', descripcion: 'Pago de factura de luz', monto: -50 },
+      { id: 2, fecha: '2023-07-21', descripcion: 'Depósito de salario', monto: 2000 },
+      { id: 3, fecha: '2023-07-22', descripcion: 'Compra en supermercado', monto: -100 },
+      // Agrega más datos simulados si es necesario
+    ];
 
-  obtenerMovimientos(fechaInicio: string, fechaFin: string): Observable<any> {
-    const params = {
-      fechaInicio: fechaInicio,
-      fechaFin: fechaFin
-    };
-
-    return this.http.get(this.apiUrl, { params: params });
+    return movimientosMock;
   }
+
 }
+

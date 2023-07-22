@@ -1,0 +1,18 @@
+<h1>Retiro de cuenta bancaria</h1>
+<form (ngSubmit)="realizarRetiro()" class="withdraw-form">
+  <div class="form-group">
+    <label for="cuentaId">ID de cuenta:</label>
+    <input type="number" id="cuentaId" name="cuentaId" [(ngModel)]="cuentaId" required>
+  </div>
+  <div class="form-group">
+    <label for="monto">Monto a retirar:</label>
+    <input type="number" id="monto" name="monto" [(ngModel)]="monto" required>
+  </div>
+  <button type="submit">Realizar retiro</button>
+</form>
+
+<div *ngIf="retiroExitoso">
+  <p>Retiro realizado exitosamente.</p>
+</div>
+
+
