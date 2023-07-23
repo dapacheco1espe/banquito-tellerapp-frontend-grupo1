@@ -1,5 +1,7 @@
+<br><br><p>transferences works!</p>
+
 <h1>Retiro de cuenta bancaria</h1>
-<form (ngSubmit)="realizarRetiro()" class="withdraw-form">
+<form (ngSubmit)="realizarTransferencia()" class="withdraw-form">
   <div class="form-group">
     <label for="cuentaId">ID de cuenta:</label>
     <input type="number" id="cuentaId" name="cuentaId" [(ngModel)]="cuentaId" required>
@@ -11,8 +13,6 @@
   <button type="submit">Realizar retiro</button>
 </form>
 
-<div *ngIf="retiroExitoso">
+<div *ngIf="transferenciaExitoso">
   <p>Retiro realizado exitosamente.</p>
 </div>
-
-

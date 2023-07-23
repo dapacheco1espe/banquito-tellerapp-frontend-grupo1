@@ -1,4 +1,4 @@
-export interface Retiro {
+export interface Transferences {
     cuentaId: number;
     monto: number;
   }

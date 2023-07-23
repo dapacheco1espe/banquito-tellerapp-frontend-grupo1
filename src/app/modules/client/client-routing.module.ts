@@ -11,8 +11,8 @@ const routes: Routes = [
     loadChildren: () => import('./movements/movements.module') .then(m => m.MovementsModule),
   },
   {
-    path: 'retiro',
-    loadChildren: () => import('./retiro/retiro.module') .then(m => m.RetiroModule),
+    path: 'transferences',
+    loadChildren: () => import('./transferences/transferences.module') .then(m => m.TransferencesModule),
   }
 ];
 
