@@ -1,5 +1,5 @@
 // import { Component } from '@angular/core';
-// import { Transferences } from './transferences.model';
+//import { Transferences } from './transferences.model';
 // import { TransferencesService } from './transferences.service';
 
 // @Component({
@@ -33,7 +33,8 @@
 //   }
 // }
 
-import { Component, OnInit } from '@angular/core';
+
+import { Component } from '@angular/core';
 import { Transferences } from './transferences.model';
 import { TransferencesService } from './transferences.service';
 
@@ -46,6 +47,9 @@ export class TransferencesComponent {
   cuentaId: number;
   monto: number;
   transferenciaExitoso: boolean = false;
+
+  // Definir una variable de tipo Transferences
+  transference: Transferences;
 
   constructor(private transferencesService: TransferencesService) { }
 
