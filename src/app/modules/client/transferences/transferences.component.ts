@@ -18,15 +18,22 @@ export class TransferencesComponent implements OnInit, AfterViewInit {
     this.formClient = this._formBuilder.group({
       accountNumber: ['',[Validators.required, Validators.pattern(this._REGEXNUMBERS)]],
     });
+    this._changeDetectorRef.markForCheck();
   }
   ngAfterViewInit(): void {
-    this.chipList.chips.get(0).selected = true;
-    this.chipSelectedValue =  this.chipList.selected['value'];
+    setTimeout(() => {
+      this.chipList.chips.get(0).selected = true;
+      this.chipSelectedValue =  this.chipList.selected['value'];
+      this._changeDetectorRef.markForCheck();2
+    }, 0);
+    
   }
   public selectThisChip(index:number){
-    this.chipList.chips.get(index).selected = !this.chipList.chips.get(index).selected;
-    this.chipSelectedValue =  this.chipList.selected['value'];
-    this._changeDetectorRef.markForCheck();
+    setTimeout(() => {
+      this.chipList.chips.get(index).selected = !this.chipList.chips.get(index).selected;
+      this.chipSelectedValue =  this.chipList.selected != undefined ? this.chipList.selected['value'] : '';
+      this._changeDetectorRef.markForCheck();
+    }, 0);
   }
 
 }

@@ -16,6 +16,10 @@ export class BalanceService {
   get accounts$():Observable<Account>{
     return this._account.asObservable();
   }
+
+  set accountValue(account:Account){
+    this._account.next(account);
+  }
   constructor(private _http:HttpClient) {
     this._baseURL = environment.baseURL;
   }

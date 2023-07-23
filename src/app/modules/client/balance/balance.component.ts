@@ -1,12 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BalanceService } from '../services/balance.service';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Account } from '../Models/Account';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import moment from 'moment';
 import { ExportAsService, ExportAsConfig } from 'ngx-export-as';
+import { takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'app-balance',
   templateUrl: './balance.component.html',
@@ -14,7 +15,7 @@ import { ExportAsService, ExportAsConfig } from 'ngx-export-as';
   encapsulation  : ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BalanceComponent implements OnInit {
+export class BalanceComponent implements OnInit, OnDestroy {
   private exportAsConfig: ExportAsConfig = {
     type: 'pdf', // the type you want to download
     elementIdOrContent: 'balancePdf', // the id of html/table element
@@ -24,9 +25,11 @@ export class BalanceComponent implements OnInit {
     }
   }
   private _REGEXNUMBERS:RegExp = /^\d+$/;
+  private _unsubscribeAll:Subject<any> = new Subject<any>();
   public account$:Observable<Account>;
   public formClient:FormGroup;
   public currentDate:string = '';
+  private _account:Account;
   constructor(private _formBuilder:FormBuilder, private _changeDetectorRef:ChangeDetectorRef,
     private _balanceService:BalanceService, private _fuseConfirmationService:FuseConfirmationService,
     private _exportAsService:ExportAsService) {
@@ -41,9 +44,20 @@ export class BalanceComponent implements OnInit {
     this._changeDetectorRef.markForCheck();
   }
 
+  ngOnDestroy(): void {
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
+    this._balanceService.accountValue = null;
+  }
   public findBalanceByAccountNumber(){
     this.currentDate = moment(new Date()).toISOString();
-    this._balanceService.findBalanceByAccountNumber(this.formClient.get('accountNumber').value).subscribe({
+    this._balanceService.findBalanceByAccountNumber(this.formClient.get('accountNumber').value)
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe({
+      next:(account:Account)=>{
+        this._account = {...account};
+        this._changeDetectorRef.markForCheck();
+      },
       error:(error:HttpErrorResponse) => {
         this._fuseConfirmationService.open({
           title: 'Consulta de balance',
@@ -64,8 +78,7 @@ export class BalanceComponent implements OnInit {
   }
 
   public downloadAsPdf(){
-    const voucherElement = document.getElementById('balancePdf');
     this.exportAsConfig.options.jsPDF.format = [window.innerWidth - 800,window.innerHeight -300];
-    this._exportAsService.save(this.exportAsConfig,'Comprobante').subscribe({});
+    this._exportAsService.save(this.exportAsConfig,`Comprobante-${this._account.accountClientData.lastname}`).subscribe({});
   }
 }
