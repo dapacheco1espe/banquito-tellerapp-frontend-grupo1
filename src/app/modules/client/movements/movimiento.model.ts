@@ -3,4 +3,5 @@ export interface Movimiento {
     fecha: string;
     descripcion: string;
     monto: number;
+    saldoActual: number;
 }

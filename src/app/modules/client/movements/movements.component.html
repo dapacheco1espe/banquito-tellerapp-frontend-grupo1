@@ -18,6 +18,11 @@
   
 </form>
 
+<!-- Mostrar mensaje de error -->
+<div *ngIf="!formValid" class="error-message">
+  <p>{{ errorFecha }}</p>
+</div>
+
 <!-- Mostrar el formulario de detalles de movimientos si se ha realizado una consulta -->
 <form class="mb-8">
   <div *ngIf="mostrarDesglose">
@@ -25,18 +30,23 @@
     <table>
       <thead>
         <tr>
+          <th>ID</th>
           <th>Fecha</th>
           <th>Descripción</th>
           <th>Monto</th>
+          <th>Saldo Actual</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let movimiento of movimientos">
+          <td>{{ movimiento.id }}</td>
           <td>{{ movimiento.fecha }}</td>
           <td>{{ movimiento.descripcion }}</td>
           <td>{{ movimiento.monto }}</td>
+          <td>{{ movimiento.saldoActual }}</td>
         </tr>
       </tbody>
     </table>
   </div> 
 </form>
+
