@@ -1,1 +1,73 @@
-<p>withdraw works!</p>
+<!--<p>withdraw works!</p>-->
+
+
+<div class="withdraw-container">
+    <h1>BanQuito Retiros</h1>
+    <form #form="ngForm" (ngSubmit)="realizarRetiro()" class="withdraw-form">
+      <div class="form-group">
+        <label for="cuentaId">ID de cuenta:</label>
+        <input type="number" id="cuentaId" name="cuentaId" [(ngModel)]="cuentaId" required>
+      </div>
+      <div class="form-group">
+        <label for="monto">Monto a retirar:</label>
+        <input type="number" id="monto" name="monto" [(ngModel)]="monto" required>
+      </div>
+      <button type="submit" [disabled]="!form.valid">Realizar retiro</button>
+    </form>
+  
+    <div *ngIf="retiroExitoso" class="success-message">
+        <p style="text-align: center;">{{ monto <= saldoTotal ? '' : 'Saldo insuficiente para el retiro.' }}</p>
+      </div>
+  
+    <br><br>
+    <div *ngIf="retiroExitoso">
+      <table>
+        <thead>
+          <tr>
+            <th>ID de la cuenta</th>
+            <th>Saldo total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ cuentaId }}</td>
+            <td>{{ saldoTotal + monto }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <div *ngIf="retiroExitoso">
+      <table>
+        <thead>
+          <tr>
+            <th>ID de cuenta</th>
+            <th>Monto retirado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ cuentaId }}</td>
+            <td>- {{ monto }}</td>
+          </tr>
+        </tbody>
+      </table>
+  
+      <table>
+        <thead>
+          <tr>
+            <th>ID de cuenta</th>
+            <th>Saldo después del movimiento</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ cuentaId }}</td>
+            <td>{{ saldoTotal }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  
