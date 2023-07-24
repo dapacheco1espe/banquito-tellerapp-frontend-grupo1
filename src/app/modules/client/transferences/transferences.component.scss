@@ -1,0 +1,6 @@
+.slider {
+    scroll-snap-type: x mandatory;
+}
+.slider>div {
+    scroll-snap-align: start;
+}
