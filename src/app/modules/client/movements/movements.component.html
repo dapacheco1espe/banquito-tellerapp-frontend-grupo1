@@ -1,1 +1,42 @@
-<p>movements works!</p>
+<!--<p>movements works!</p>-->
+
+<h1 class="text-2xl font-bold mb-4">Consulta de Movimientos</h1><br>
+
+<form class="mb-8" (ngSubmit)="realizarConsulta()">
+  <div class="mb-4">
+    <br><br><br><label for="fechaInicio" class="block text-gray-700 font-bold mb-1">Fecha de inicio:</label>
+    <input type="date" id="fechaInicio" name="fechaInicio" [(ngModel)]="fechaInicio" required
+      class="px-4 py-2 border border-gray-300 rounded">
+  </div>
+  <div class="mb-4">
+    <label for="fechaFin" class="block text-gray-700 font-bold mb-1">Fecha de fin:</label>
+    <input type="date" id="fechaFin" name="fechaFin" [(ngModel)]="fechaFin" required
+      class="px-4 py-2 border border-gray-300 rounded">
+  </div>
+  <button type="submit" class="px-4 py-2 bg-blue-500 text-white font-bold rounded" (click)="realizarConsulta()">Consultar Movimientos</button>
+
+  
+</form>
+
+<!-- Mostrar el formulario de detalles de movimientos si se ha realizado una consulta -->
+<form class="mb-8">
+  <div *ngIf="mostrarDesglose">
+    <br><br><br><h2>Resultados de la consulta:</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Descripción</th>
+          <th>Monto</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let movimiento of movimientos">
+          <td>{{ movimiento.fecha }}</td>
+          <td>{{ movimiento.descripcion }}</td>
+          <td>{{ movimiento.monto }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div> 
+</form>

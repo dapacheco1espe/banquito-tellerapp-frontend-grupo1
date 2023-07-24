@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms'; // Importa el módulo FormsModule
 
 import { WithdrawRoutingModule } from './withdraw-routing.module';
 import { WithdrawComponent } from './withdraw.component';
@@ -11,7 +12,8 @@ import { WithdrawComponent } from './withdraw.component';
   ],
   imports: [
     CommonModule,
-    WithdrawRoutingModule
+    WithdrawRoutingModule,
+    FormsModule
   ]
 })
 export class WithdrawModule { }
