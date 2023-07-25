@@ -32,22 +32,22 @@
         <ng-container *ngIf="(account$ | async) as account">
             <div class="flex flex-row w-full justify-center mt-4" id="balancePdf">
                 <section class="flex flex-col items-center w-full sm:w-1/2 p-2 border rounded-md gap-3" >
-                    <h2 class="text-2xl font-bold mb-4">Nro. Cuenta {{account.accountNumber}}</h2>
-                    <div class="w-full grid grid-cols-2">
+                    <h2 class="text-2xl font-bold mb-4">Nro. Cuenta {{account.codeInternalAccount}}</h2>
+                    <!-- <div class="w-full grid grid-cols-2">
                         <span class="font-semibold text-center">Propietario: </span>
                         <span class="text-center">{{account.accountClientData.name + ' ' + account.accountClientData.lastname}}</span>
-                    </div>
-                    <div class="w-full grid grid-cols-2">
+                    </div> -->
+                    <!-- <div class="w-full grid grid-cols-2">
                         <span class="font-semibold text-center">Identificación: </span>
                         <span class="text-center">{{account.accountClientData.identification}}</span>
-                    </div>
+                    </div> -->
                     <div class="w-full grid grid-cols-2">
                         <span class="font-semibold text-center">Tipo de cuenta: </span>
-                        <span class="text-center">{{account.accountType + ' ' + account.accountTypeId}}</span>
+                        <span class="text-center">{{account.name}}</span>
                     </div>
                     <div class="w-full grid grid-cols-2">
                         <span class="font-semibold text-center">Saldo actual de la cuenta: </span>
-                        <span class="text-center">$ {{account.accountBalance}} USD</span>
+                        <span class="text-center">$ {{account.availableBalance}} USD</span>
                     </div>
                     <div class="w-full grid grid-cols-2">
                         <span class="font-semibold text-center">Fecha de consulta: </span>

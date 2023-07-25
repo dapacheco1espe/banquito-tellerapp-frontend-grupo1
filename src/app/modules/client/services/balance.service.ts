@@ -24,15 +24,15 @@ export class BalanceService {
     this._baseURL = environment.baseURL;
   }
 
-  public findBalanceByAccountNumber(accountNumber:number):Observable<any>{
-    return this._http.get('api/v1/account',{
+  public findBalanceByAccountNumber(accountNumber:string | number):Observable<any>{
+    return this._http.get(`${this._baseURL}/accounts/accounts-client/${accountNumber}`,{
       params:{
         accountNumber: accountNumber,
       }
     })
     .pipe(
       tap((response)=>{
-        this._account.next(response);
+        this._account.next(response[0]);
       })
     );
   }

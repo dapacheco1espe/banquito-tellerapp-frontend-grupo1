@@ -38,7 +38,8 @@ export class BalanceComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.formClient = this._formBuilder.group({
-      accountNumber: ['',[Validators.required, Validators.pattern(this._REGEXNUMBERS)]],
+      //accountNumber: ['',[Validators.required, Validators.pattern(this._REGEXNUMBERS)]],
+      accountNumber: ['',[Validators.required]],
     });
     this.account$ = this._balanceService.accounts$;
     this._changeDetectorRef.markForCheck();
@@ -79,6 +80,7 @@ export class BalanceComponent implements OnInit, OnDestroy {
 
   public downloadAsPdf(){
     this.exportAsConfig.options.jsPDF.format = [window.innerWidth - 800,window.innerHeight -300];
-    this._exportAsService.save(this.exportAsConfig,`Comprobante-${this._account.accountClientData.lastname}`).subscribe({});
+    //this._exportAsService.save(this.exportAsConfig,`Comprobante-${this._account.accountClientData.lastname}`).subscribe({});
+    this._exportAsService.save(this.exportAsConfig,`Comprobante`).subscribe({});
   }
 }

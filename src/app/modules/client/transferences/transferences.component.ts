@@ -14,6 +14,7 @@ import { TransferencesService } from '../services/transferences.service';
 export class TransferencesComponent implements OnInit, AfterViewInit {
   @ViewChild('chipList') chipList:MatChipList;
   public formClient:FormGroup;
+  public amountForm:FormGroup;
   private _REGEXNUMBERS:RegExp = /^\d+$/;
   public chipSelectedValue : string = '';
   public accounts$:Observable<Account[]>;
@@ -22,7 +23,10 @@ export class TransferencesComponent implements OnInit, AfterViewInit {
     private _transferencesService:TransferencesService, private _fuseConfirmationService:FuseConfirmationService) { }
   ngOnInit(): void {
     this.formClient = this._formBuilder.group({
-      accountNumber: ['',[Validators.required, Validators.pattern(this._REGEXNUMBERS)]],
+      accountNumber: ['',[Validators.required]],
+    });
+    this.amountForm = this._formBuilder.group({
+      amount:['',[Validators.required,Validators.min(1)]],
     });
     this.accounts$ = this._transferencesService.accounts$;
     this._changeDetectorRef.markForCheck();
@@ -31,7 +35,7 @@ export class TransferencesComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.chipList.chips.get(0).selected = true;
       this.chipSelectedValue =  this.chipList.selected['value'];
-      this._changeDetectorRef.markForCheck();2
+      this._changeDetectorRef.markForCheck();
     }, 0);
     
   }
@@ -59,10 +63,10 @@ export class TransferencesComponent implements OnInit, AfterViewInit {
     if(this._selectedAccount == undefined ){
       this._selectedAccount = {...selectedAccount};
      card.classList.add("bg-green-50");
-    }else if(selectedAccount.accountNumber == this._selectedAccount.accountNumber){
+    }else if(selectedAccount.codeInternalAccount == this._selectedAccount.codeInternalAccount){
       this._selectedAccount = {...selectedAccount};
-      card.classList.remove('bg-green-50');
-    }else if(selectedAccount.accountNumber != this._selectedAccount.accountNumber){
+      card.classList.contains('bg-green-50') ? card.classList.remove('bg-green-50') : card.classList.add('bg-green-50') ;
+    }else if(selectedAccount.codeInternalAccount != this._selectedAccount.codeInternalAccount){
       this._selectedAccount = {...selectedAccount};
       this.accounts$.subscribe({
         next:(res)=>{
@@ -75,6 +79,9 @@ export class TransferencesComponent implements OnInit, AfterViewInit {
       });
       card.classList.contains('bg-green-50') ? card.classList.remove('bg-green-50') : card.classList.add('bg-green-50') ;
     }
+  }
 
+  public transferToDestinyAccount(){
+    this._transferencesService.generateTransference(this._selectedAccount,this.amountForm.get('amount').value).subscribe();
   }
 }
