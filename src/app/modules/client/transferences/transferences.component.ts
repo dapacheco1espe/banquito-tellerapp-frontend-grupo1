@@ -5,6 +5,7 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { Observable } from 'rxjs';
 import { Account } from '../Models/Account';
 import { TransferencesService } from '../services/transferences.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-transferences',
@@ -55,7 +56,25 @@ export class TransferencesComponent implements OnInit, AfterViewInit {
       'Cuenta': 'ACC',
     }
     const param = accountParameters[this.chipSelectedValue];
-    this._transferencesService.findAccountsByParameter(param,this.formClient.get('accountNumber').value).subscribe();
+    this._transferencesService.findAccountsByParameter(param,this.formClient.get('accountNumber').value).subscribe({
+      next:()=>{
+ 
+      },
+      error:(err:HttpErrorResponse) =>{
+        const confirmation = this._fuseConfirmationService.open({
+          title: 'Error en consulta',
+          message: 'La cuenta no existe, por favor intentelo de nuevo',
+          actions:{
+            confirm:{
+              color:'primary'
+            },
+            cancel:{
+              show:false,
+            }
+          }
+        });
+      }
+    });
   }
   
   public selectThisAccount(selectedAccount:Account,elementIndex:string){
@@ -72,7 +91,6 @@ export class TransferencesComponent implements OnInit, AfterViewInit {
         next:(res)=>{
           res.forEach((it,index) => {
             const auxCard = document.getElementById(`card-${index}`);
-            console.log(auxCard.classList.contains('bg-green-50'));
             auxCard.classList.contains('bg-green-50') ?? auxCard.classList.remove('bg-green-50');
           });
         }
@@ -82,6 +100,38 @@ export class TransferencesComponent implements OnInit, AfterViewInit {
   }
 
   public transferToDestinyAccount(){
-    this._transferencesService.generateTransference(this._selectedAccount,this.amountForm.get('amount').value).subscribe();
+    this._transferencesService.generateTransference(this._selectedAccount,this.amountForm.get('amount').value).subscribe({
+      next:(res)=>{
+        const confirmation = this._fuseConfirmationService.open({
+          title: 'Transaccion realizada',
+          message: 'La transacción ha sido realizada con éxito',
+          icon:{
+            color: 'success'
+          },
+          actions:{
+            confirm:{
+              color:'primary'
+            },
+            cancel:{
+              show:false,
+            }
+          }
+        });
+      },
+      error:(e:HttpErrorResponse) => {
+        const confirmation = this._fuseConfirmationService.open({
+          title: 'Transaccion rechazada',
+          message: 'La transacción no se pudo realizar, intente mas tarde',
+          actions:{
+            confirm:{
+              color:'primary'
+            },
+            cancel:{
+              show:false,
+            }
+          }
+        });
+      }
+    });
   }
 }

@@ -21,10 +21,11 @@ export class TransferencesService {
 
   
   public findAccountsByParameter(param:'RUC' | 'CED' | 'PAS' | 'ACC',paramValue:string):Observable<any>{
-    return this._http.get(`${this._baseURL}/accounts/accounts-client/${paramValue}`)
+    return this._http.get(`${this._baseURL}/accounts/account-internalcode/${paramValue}`)
     .pipe(
       tap((response) =>{
-        this._accounts.next(response);
+        const res = [response];
+        this._accounts.next(res);
       })
     );
   }

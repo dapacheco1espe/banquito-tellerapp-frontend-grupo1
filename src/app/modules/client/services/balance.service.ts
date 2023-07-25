@@ -25,14 +25,14 @@ export class BalanceService {
   }
 
   public findBalanceByAccountNumber(accountNumber:string | number):Observable<any>{
-    return this._http.get(`${this._baseURL}/accounts/accounts-client/${accountNumber}`,{
+    return this._http.get(`${this._baseURL}/accounts/account-internalcode/${accountNumber}`,{
       params:{
         accountNumber: accountNumber,
       }
     })
     .pipe(
       tap((response)=>{
-        this._account.next(response[0]);
+        this._account.next(response);
       })
     );
   }
