@@ -8,6 +8,7 @@ import { Movimiento } from './movimiento.model';
   styleUrls: ['./movements.component.scss']
 })
 export class MovementsComponent {
+  numeroCuenta: string; 
   fechaInicio: string;
   fechaFin: string;
   //movimientos: any[];

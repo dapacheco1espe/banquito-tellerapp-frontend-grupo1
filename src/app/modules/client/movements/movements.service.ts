@@ -1,10 +1,23 @@
 import { Injectable } from '@angular/core';
 import { Movimiento } from './movimiento.model';
+import { distance } from 'chroma-js';
+import { environment } from 'environments/environment';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MovementsService {
+  private baseURL: string =''
+
+  constructor(private _http:HttpClient){
+    this.baseURL=environment.baseURL
+  }
+
+  public getMovimientos():Observable <any> {
+    return this._http.get(`${this.baseURL}/api/v1/accounts`)
+  }
 
   obtenerMovimientosMock(fechaInicio: string, fechaFin: string): Movimiento[] {
     // Aquí puedes retornar los datos simulados de mockapi

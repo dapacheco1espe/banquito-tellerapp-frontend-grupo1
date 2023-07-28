@@ -3,8 +3,13 @@
 <h1 class="text-2xl font-bold mb-4">Consulta de Movimientos</h1><br>
 
 <form class="mb-8" (ngSubmit)="realizarConsulta()">
+  <div class="">
+    <br><br><label for="numeroCuenta" class="block text-gray-700 font-bold mb-1">Número de cuenta:</label>
+    <input type="text" id="numeroCuenta" name="numeroCuenta" [(ngModel)]="numeroCuenta" required
+      class="px-4 py-2 border border-gray-300 rounded">
+  </div>
   <div class="mb-4">
-    <br><br><br><label for="fechaInicio" class="block text-gray-700 font-bold mb-1">Fecha de inicio:</label>
+    <br><label for="fechaInicio" class="block text-gray-700 font-bold mb-1">Fecha de inicio:</label>
     <input type="date" id="fechaInicio" name="fechaInicio" [(ngModel)]="fechaInicio" required
       class="px-4 py-2 border border-gray-300 rounded">
   </div>

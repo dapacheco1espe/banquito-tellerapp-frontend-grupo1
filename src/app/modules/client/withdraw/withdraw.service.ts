@@ -22,20 +22,36 @@
 //   }
 // }
 
+import { environment } from 'environments/environment';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+
 
 import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class WithdrawService {
+  private baseURL: string =''
+
+  constructor(private _http:HttpClient){
+    this.baseURL=environment.baseURL
+  }
+
+  public getRetiro():Observable <any> {
+    return this._http.get(`${this.baseURL}/url postman`)
+  }
+
+
   private cuentasBancarias: any[] = [
     { id: 1, saldo: 1000 },
     { id: 2, saldo: 1500 },
     // Agrega más cuentas si es necesario
   ];
 
-  constructor() { }
+  //constructor() { }
 
   realizarRetiro(cuentaId: number, monto: number): boolean {
     const cuentaEncontrada = this.cuentasBancarias.find(cuenta => cuenta.id === cuentaId);
