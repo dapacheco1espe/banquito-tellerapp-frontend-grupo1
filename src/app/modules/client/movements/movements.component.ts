@@ -8,22 +8,39 @@ import { Movimiento } from './movimiento.model';
   styleUrls: ['./movements.component.scss']
 })
 export class MovementsComponent {
+  numeroCuenta: string; 
   fechaInicio: string;
   fechaFin: string;
   //movimientos: any[];
   movimientos: Movimiento[];
   mostrarDesglose: boolean;
+  formValid: boolean = true;
+  errorFecha: string = '';
 
   constructor(private movementsService: MovementsService) { }
 
   realizarConsulta(): void {
-    if (this.fechaInicio && this.fechaFin) {
-      this.movimientos = []; // Reiniciar la lista de movimientos
-      this.mostrarDesglose = false; // Ocultar el formulario de desglose
+    if (!this.fechaInicio || !this.fechaFin) {
+      this.formValid = false;
+      this.errorFecha = 'Por favor, completa todos los campos.';
+      return;
+    }
 
-      // Obtener los movimientos simulados del servicio
-      this.movimientos = this.movementsService.obtenerMovimientosMock(this.fechaInicio, this.fechaFin);
-      this.mostrarDesglose = true; // Mostrar el formulario de desglose
+
+    // Realizar la consulta de movimientos filtrados según las fechas
+    this.movimientos = this.movementsService.obtenerMovimientosMock(this.fechaInicio, this.fechaFin);
+    this.calcularSaldoActual();
+    this.mostrarDesglose = true;
+    this.formValid = true;
+    this.errorFecha = '';
+    
+  }
+
+  private calcularSaldoActual(): void {
+    let saldoActual = 0;
+    for (const movimiento of this.movimientos) {
+      saldoActual += movimiento.monto;
+      movimiento.saldoActual = saldoActual;
     }
   }
 }
