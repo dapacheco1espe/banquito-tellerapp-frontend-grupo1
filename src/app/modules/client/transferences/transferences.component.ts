@@ -1,11 +1,14 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatChipList } from '@angular/material/chips';
+import { MatDialogRef } from '@angular/material/dialog';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { FuseConfirmationDialogComponent } from '@fuse/services/confirmation/dialog/dialog.component';
 import { Observable } from 'rxjs';
 import { Account } from '../Models/Account';
 import { TransferencesService } from '../services/transferences.service';
-import { HttpErrorResponse } from '@angular/common/http';
+import { Transaction } from './Models/Transaction';
 
 @Component({
   selector: 'app-transferences',
@@ -100,38 +103,79 @@ export class TransferencesComponent implements OnInit, AfterViewInit {
   }
 
   public transferToDestinyAccount(){
-    this._transferencesService.generateTransference(this._selectedAccount,this.amountForm.get('amount').value).subscribe({
-      next:(res)=>{
-        const confirmation = this._fuseConfirmationService.open({
-          title: 'Transaccion realizada',
-          message: 'La transacción ha sido realizada con éxito',
-          icon:{
-            color: 'success'
-          },
-          actions:{
-            confirm:{
-              color:'primary'
+    this._generateConfirmationTransferenceDialog().afterClosed().subscribe({
+      next:(res:string)=>{
+        if(res == 'confirmed'){
+          const transaction:Transaction=  {
+            reference:'Transferencia',
+            ammount: this.amountForm.get('amount').value,
+            creditorAccount: this._selectedAccount.codeInternalAccount,
+            debtorAccount: this._selectedAccount.codeInternalAccount,
+            transactionType: 'TRANSFER',
+            notes : "",
+          };
+          this._transferencesService.generateTransference(this._selectedAccount,this.amountForm.get('amount').value).subscribe({
+            next:(res)=>{
+              const confirmation = this._fuseConfirmationService.open({
+                title: 'Transaccion realizada',
+                message: 'La transacción ha sido realizada con éxito',
+                icon:{
+                  color: 'success'
+                },
+                actions:{
+                  confirm:{
+                    color:'primary'
+                  },
+                  cancel:{
+                    show:false,
+                  }
+                }
+              });
             },
-            cancel:{
-              show:false,
+            error:(e:HttpErrorResponse) => {
+              const confirmation = this._fuseConfirmationService.open({
+                title: 'Transaccion rechazada',
+                message: 'La transacción no se pudo realizar, intente mas tarde',
+                actions:{
+                  confirm:{
+                    color:'primary'
+                  },
+                  cancel:{
+                    show:false,
+                  }
+                }
+              });
             }
-          }
-        });
-      },
-      error:(e:HttpErrorResponse) => {
-        const confirmation = this._fuseConfirmationService.open({
-          title: 'Transaccion rechazada',
-          message: 'La transacción no se pudo realizar, intente mas tarde',
-          actions:{
-            confirm:{
-              color:'primary'
-            },
-            cancel:{
-              show:false,
-            }
-          }
-        });
+          });
+        }
       }
     });
+    
+  }
+
+  private _generateConfirmationTransferenceDialog():MatDialogRef<FuseConfirmationDialogComponent,any>{
+    const confirmation = this._fuseConfirmationService.open({
+      title: 'Confirmación de transferencia',
+      message: `<h1>Antes de continuar verifique la siguiente informacion con el cliente</h1>
+        <p>Se va a realizar un depósito a la persona con nombre <span class="font-bold">${'x'}</span>, con número de identificación <span class="font-bold">${'x'}</span> 
+        en la cuenta <span class="font-bold">${this._selectedAccount.codeInternalAccount}</span>
+        por el valor de <span class="font-bold">$ ${this.amountForm.get('amount').value} USD</span>
+        </p>
+      `,
+      icon:{
+        color: 'info'
+      },
+      actions:{
+        confirm:{
+          color:'primary',
+          label:'Confirmar'
+        },
+        cancel:{
+          show:true,
+          label:'Cancelar'
+        }
+      }
+    });
+    return confirmation;
   }
 }

@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Account } from '../Models/Account';
 import { tap } from 'rxjs/operators';
+import { Account } from '../Models/Account';
 
 @Injectable({
   providedIn: 'root'
@@ -25,11 +25,7 @@ export class BalanceService {
   }
 
   public findBalanceByAccountNumber(accountNumber:string | number):Observable<any>{
-    return this._http.get(`${this._baseURL}/accounts/account-internalcode/${accountNumber}`,{
-      params:{
-        accountNumber: accountNumber,
-      }
-    })
+    return this._http.get(`${this._baseURL}/accounts/account-internalcode/${accountNumber}`)
     .pipe(
       tap((response)=>{
         this._account.next(response);

@@ -4,7 +4,8 @@
 
 export const environment = {
     production: false,
-    baseURL: 'https://localhost:9005/api/v1',
+    //baseURL: 'banquito-accounts-try-production.up.railway.app/api/v1',
+    baseURL: 'http://localhost:9050/api/v1',
 };
 
 /*

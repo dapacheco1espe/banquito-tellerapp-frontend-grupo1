@@ -12,11 +12,7 @@ export interface Account {
     clientUk: string,//client id
     groupUk: string | null,
     productUk: string
-    // accountNumber: number,
-    // accountBalance: number,
-    // accountType: string,
-    // accountTypeId: string,
-    // accountClientData: Client
+
 }
 
 export interface Client {

@@ -1,13 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BalanceService } from '../services/balance.service';
-import { Observable, Subject } from 'rxjs';
-import { Account } from '../Models/Account';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import moment from 'moment';
-import { ExportAsService, ExportAsConfig } from 'ngx-export-as';
+import { ExportAsConfig, ExportAsService } from 'ngx-export-as';
+import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { Account } from '../Models/Account';
+import { BalanceService } from '../services/balance.service';
 @Component({
   selector: 'app-balance',
   templateUrl: './balance.component.html',
@@ -39,7 +39,8 @@ export class BalanceComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.formClient = this._formBuilder.group({
       //accountNumber: ['',[Validators.required, Validators.pattern(this._REGEXNUMBERS)]],
-      accountNumber: ['',[Validators.required]],
+      accountNumber: [''],
+      docummentNumber:['']
     });
     this.account$ = this._balanceService.accounts$;
     this._changeDetectorRef.markForCheck();
