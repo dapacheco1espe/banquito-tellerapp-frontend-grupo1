@@ -45,11 +45,12 @@ export class WithdrawService {
   // }}
 
   private apiUrl = 'http://localhost:9050/api/v1/accounts';
-  private baseUrl = 'http://localhost:9050/api/v1/transactions';
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.apiUrl = environment.baseURL;
+  }
 
   findAccountByInternalCodeAccount(accountInternalCode: string) {
-    return this.http.get(`${this.apiUrl}/account-internalcode/${accountInternalCode}`);
+    return this.http.get(`${this.apiUrl}/accounts/account-internalcode/${accountInternalCode}`);
   }
 
 
@@ -64,7 +65,7 @@ export class WithdrawService {
 
   // Método para realizar un retiro
   realizarRetiro(accountTransactionReqDto: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/transaction`, accountTransactionReqDto);
+    return this.http.post(`${this.apiUrl}/transactions/transaction`, accountTransactionReqDto);
   }
 
 

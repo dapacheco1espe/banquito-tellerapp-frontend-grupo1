@@ -157,8 +157,7 @@ export class TransferencesComponent implements OnInit, AfterViewInit {
     const confirmation = this._fuseConfirmationService.open({
       title: 'Confirmación de transferencia',
       message: `<h1>Antes de continuar verifique la siguiente informacion con el cliente</h1>
-        <p>Se va a realizar un depósito a la persona con nombre <span class="font-bold">${'x'}</span>, con número de identificación <span class="font-bold">${'x'}</span> 
-        en la cuenta <span class="font-bold">${this._selectedAccount.codeInternalAccount}</span>
+        <p>Se va a realizar un depósito en la cuenta <span class="font-bold">${this._selectedAccount.codeInternalAccount}</span>
         por el valor de <span class="font-bold">$ ${this.amountForm.get('amount').value} USD</span>
         </p>
       `,

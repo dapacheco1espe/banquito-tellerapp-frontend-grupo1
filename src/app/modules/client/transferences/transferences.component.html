@@ -44,7 +44,7 @@
         <div class="w-full sm:w-1/2 flex flex-col py-6 px-10">
             <div class="slider w-full h-64 flex gap-5 overflow-x-scroll">
                 <ng-container *ngIf="(accounts$ | async) as accounts">
-                    <div [id]="'card-'+i" *ngFor="let account of accounts; index as i" class="w-full h-56 flex flex-col border rounded-md p-8" (click)="selectThisAccount(account,i);" style="flex: 0 0 100%">
+                    <div [id]="'card-'+i" *ngFor="let account of accounts; index as i" class="w-full h-56 flex flex-col border rounded-md p-8"  style="flex: 0 0 100%">
                         <h2 class="text-2xl font-bold mb-4 text-center">Nro. Cuenta {{account.codeInternalAccount}}</h2>
                         <div class="flex flex-col gap-3">
                             <!-- <div class="flex flex-row justify-between">
@@ -64,6 +64,7 @@
                                 <span class="text-center">$ {{account.availableBalance}} USD</span>
                             </div>
                         </div>
+                        <button (click)="selectThisAccount(account,i);" mat-flat-button color="primary">Elegir cuenta</button>
                     </div>
                 </ng-container>
             </div>

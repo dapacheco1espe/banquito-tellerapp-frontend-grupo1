@@ -31,7 +31,7 @@ export class TransferencesService {
   }
 
   public generateTransference(account:Account,amount:number):Observable<any>{
-    return this._http.post(`${this._baseURL}/accounts/transaction`,{
+    return this._http.post(`${this._baseURL}/transactions/transaction`,{
       id                : account.id,
       reference         : 'ATM BANCO',
       creditorBankCode  : '',
