@@ -2,72 +2,65 @@
 
 
 <div class="withdraw-container">
-    <h1>BanQuito Retiros</h1>
-    <form #form="ngForm" (ngSubmit)="realizarRetiro()" class="withdraw-form">
+  <h1>BanQuito Retiros</h1>
+  <form #form="ngForm" (ngSubmit)="realizarRetiro()" class="withdraw-form">
+    <div class="form-group">
+      <!-- <label for="cuentaId">Número de cuenta:</label>
+      <input type="number" id="cuentaId" name="cuentaId" [(ngModel)]="cuentaId" required> -->
+
       <div class="form-group">
-        <label for="cuentaId">ID de cuenta:</label>
-        <input type="number" id="cuentaId" name="cuentaId" [(ngModel)]="cuentaId" required>
+        <label for="accountInternalCode">Número de cuenta:</label>
+        <input type="text" id="accountInternalCode" name="accountInternalCode" [(ngModel)]="accountInternalCode" required><br>
+        <button type="button" (click)="buscarCuentaPorInternalCode()">Buscar Número de Cuenta</button>
       </div>
-      <div class="form-group">
-        <label for="monto">Monto a retirar:</label>
-        <input type="number" id="monto" name="monto" [(ngModel)]="monto" required>
+      <!-- <div *ngIf="accountDetails">
+        <p>Detalles de la cuenta:</p>
+        <p>Nombre: {{ account.name }}</p>
+        <p>Tipo: {{ account.availableBalance }}</p>
+        <p>Nro. Cuenta {{account.codeInternalAccount}}</p>
+      </div> -->
+      <div *ngIf="accountDetails">
+        <br>
+        <p>Tipo de Cuenta: {{ accountDetails?.name }}</p>
+        <p>Numero: {{ accountDetails?.codeInternalAccount }}</p>
+        <p>Saldo Disponible: {{ accountDetails?.availableBalance }}</p>
+        <!-- ... Otros detalles de la cuenta ... -->
       </div>
-      <button type="submit" [disabled]="!form.valid">Realizar retiro</button>
-    </form>
-  
-    <div *ngIf="retiroExitoso" class="success-message">
-        <p style="text-align: center;">{{ monto <= saldoTotal ? '' : 'Saldo insuficiente para el retiro.' }}</p>
-      </div>
-  
-    <br><br>
-    <div *ngIf="retiroExitoso">
-      <table>
-        <thead>
-          <tr>
-            <th>ID de la cuenta</th>
-            <th>Saldo total</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{{ cuentaId }}</td>
-            <td>{{ saldoTotal + monto }}</td>
-          </tr>
-        </tbody>
-      </table>
+
     </div>
-  
-    <div *ngIf="retiroExitoso">
-      <table>
-        <thead>
-          <tr>
-            <th>ID de cuenta</th>
-            <th>Monto retirado</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{{ cuentaId }}</td>
-            <td>- {{ monto }}</td>
-          </tr>
-        </tbody>
-      </table>
-  
-      <table>
-        <thead>
-          <tr>
-            <th>ID de cuenta</th>
-            <th>Saldo después del movimiento</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{{ cuentaId }}</td>
-            <td>{{ saldoTotal }}</td>
-          </tr>
-        </tbody>
-      </table>
+    
+    <div class="form-group" *ngIf="accountDetails">
+      <label for="amount">Monto a retirar:</label>
+      <input type="number" id="amount" name="amount" [(ngModel)]="amount" required>
     </div>
+
+    <button type="submit" [disabled]="!form.valid || !accountDetails">Realizar retiro</button>
+  </form>
+
+  <div *ngIf="retiroExitoso">
+    <p *ngIf="monto > saldoTotal" style="color: red; text-align: center;">Saldo insuficiente para el retiro.</p>
+    <p *ngIf="retiroExitoso && monto <= saldoTotal" style="color: green; text-align: center;">Retiro exitoso.</p>
   </div>
-  
-  
+
+  <div *ngIf="retiroExitoso">
+    <table>
+      <thead>
+        <tr>
+          <th>Número de cuenta</th>
+          <th>Saldo Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ accountDetails?.codeInternalAccount }}</td>
+          <td>{{ accountDetails?.availableBalance - monto }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+
+

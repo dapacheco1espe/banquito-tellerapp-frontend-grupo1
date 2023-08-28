@@ -34,15 +34,24 @@ import { Injectable } from '@angular/core';
 })
 
 export class WithdrawService {
-  private baseURL: string =''
+  // private baseURL: string =''
 
-  constructor(private _http:HttpClient){
-    this.baseURL=environment.baseURL
+  // constructor(private _http:HttpClient){
+  //   this.baseURL=environment.baseURL
+  // }
+
+  // public getRetiro():Observable <any> {
+  //   return this._http.get(`${this.baseURL}/url postman`)
+  // }}
+
+  private apiUrl = 'http://localhost:9050/api/v1/accounts';
+  private baseUrl = 'http://localhost:9050/api/v1/transactions';
+  constructor(private http: HttpClient) {}
+
+  findAccountByInternalCodeAccount(accountInternalCode: string) {
+    return this.http.get(`${this.apiUrl}/account-internalcode/${accountInternalCode}`);
   }
 
-  public getRetiro():Observable <any> {
-    return this._http.get(`${this.baseURL}/url postman`)
-  }
 
 
   private cuentasBancarias: any[] = [
@@ -53,16 +62,15 @@ export class WithdrawService {
 
   //constructor() { }
 
-  realizarRetiro(cuentaId: number, monto: number): boolean {
-    const cuentaEncontrada = this.cuentasBancarias.find(cuenta => cuenta.id === cuentaId);
+  // Método para realizar un retiro
+  realizarRetiro(accountTransactionReqDto: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/transaction`, accountTransactionReqDto);
+  }
 
-    if (cuentaEncontrada && monto > 0 && monto <= cuentaEncontrada.saldo) {
-      // Restar el monto del saldo de la cuenta
-      cuentaEncontrada.saldo -= monto;
-      return true; // Retiro exitoso
-    } else {
-      return false; // Retiro no exitoso
-    }
+
+
+  buscarCuentaPorId(cuentaId: number): any {
+    return this.cuentasBancarias.find(cuenta => cuenta.id === cuentaId);
   }
 }
 
