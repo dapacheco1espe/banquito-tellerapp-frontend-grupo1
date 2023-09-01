@@ -1,9 +1,9 @@
 export interface Transaction{
     reference: string,
     ammount:number,
-    creditorBankCode?:string,
+    creditorBankCode:string,
     creditorAccount:string,
-    debtorBankCode?:string,
+    debtorBankCode:string,
     debtorAccount:string,
     transactionType:'TRANSFER',
     notes:string,

@@ -1,79 +1,86 @@
-<!--<p>withdraw works!</p>-->
-
-
-<div class="withdraw-container">
-  <h1>BanQuito Retiros</h1>
-  <form #form="ngForm" (ngSubmit)="realizarRetiro()" class="withdraw-form">
-    <div class="form-group">
-      <!-- <label for="cuentaId">Número de cuenta:</label>
-      <input type="number" id="cuentaId" name="cuentaId" [(ngModel)]="cuentaId" required> -->
-
+<div class="bg-white w-full h-full">
+  <div class="flex flex-col  items-center w-full">
+    <fuse-alert class="absolute bottom-0 right-0" [type]="'warn'" [name]="'alertWarn'" [dismissed]="true" [dismissible]="true">
+      <span fuseAlertTitle>Operación fallida</span>
+      No se pudo completar la operación
+    </fuse-alert>
+    <fuse-alert class="absolute bottom-0 right-0" [type]="'warn'" [name]="'alertSearchAccount'" [dismissed]="true" [dismissible]="true">
+      <span fuseAlertTitle>Error al buscar cuenta</span>
+      La cuenta buscada no existe, por favor verifique los datos nuevamente
+    </fuse-alert>
+    <fuse-alert class="absolute bottom-0 right-0" [type]="'warn'" [name]="'alertSearchAccountHttp'" [dismissed]="true" [dismissible]="true">
+      <span fuseAlertTitle>Error al buscar cuenta</span>
+      Ha ocurrido un error inesperado, por favor inténtelo nuevamente
+    </fuse-alert>
+  
+    <fuse-alert class="absolute bottom-0 right-0" [type]="'success'" [name]="'alertSuccess'" [dismissed]="true" [dismissible]="true">
+      <span fuseAlertTitle>Operación Exitosa</span>
+      Se ha realizado el retiro de forma exitosa
+    </fuse-alert>
+    <div class="px-6 py-4 self-start">
+      <h1 class="font-bold text-3xl">BanQuito Retiros</h1>
+      <div class="flex flex-row gap-5">
+        <a routerLink="/employee" class="text-primary">Teller App</a>
+        <span class="text-gray-400">/</span>
+        <p class="text-gray-400">Retiros</p>
+      </div>
+    </div>
+    <div class="border-b self-start w-full"></div>
+    <form #form="ngForm" (ngSubmit)="realizarRetiro()" class="withdraw-form mt-4">
       <div class="form-group">
-        <label for="accountInternalCode">Número de cuenta:</label>
-        <input type="text" id="accountInternalCode" name="accountInternalCode" [(ngModel)]="accountInternalCode" required><br>
-        <button type="button" (click)="buscarCuentaPorInternalCode()">Buscar Número de Cuenta</button>
+  
+        <div class="form-group">
+          <label for="accountInternalCode">Número de cuenta:</label>
+          <input type="text" id="accountInternalCode" name="accountInternalCode" [(ngModel)]="accountInternalCode"
+            required><br>
+          <button type="button" mat-flat-button color="primary" (click)="buscarCuentaPorInternalCode()">Buscar Número de Cuenta</button>
+        </div>
+        <div *ngIf="accountDetails">
+          <br>
+          <p class="font-semibold">Tipo de Cuenta: <span class="text-gray-500 font-semibold">{{ accountDetails?.name
+              }}</span></p>
+          <p class="font-semibold">Numero: <span class="text-gray-500 font-semibold">{{
+              accountDetails?.codeInternalAccount }}</span></p>
+          <p class="font-semibold">Saldo Disponible: <span class="text-gray-500 font-semibold">${{
+              accountDetails?.availableBalance }} USD</span></p>
+        </div>
       </div>
-      <!-- <div *ngIf="accountDetails">
-        <p>Detalles de la cuenta:</p>
-        <p>Nombre: {{ account.name }}</p>
-        <p>Tipo: {{ account.availableBalance }}</p>
-        <p>Nro. Cuenta {{account.codeInternalAccount}}</p>
-      </div> -->
-      <div *ngIf="accountDetails">
-        <br>
-        <p>Tipo de Cuenta: {{ accountDetails?.name }}</p>
-        <p>Numero: {{ accountDetails?.codeInternalAccount }}</p>
-        <p>Saldo Disponible: {{ accountDetails?.availableBalance }}</p>
-        <!-- ... Otros detalles de la cuenta ... -->
+      <br>
+      <div class="form-group" *ngIf="accountDetails">
+        <label for="amount">Monto a retirar:</label>
+        <input type="number" id="amount" name="amount" [(ngModel)]="amount" required>
       </div>
-
+      <button type="submit" mat-flat-button color="primary" [disabled]="!form.valid || !accountDetails || amount > saldoTotal || amount < 1">Realizar
+        retiro</button>
+    </form>
+  
+    <div *ngIf="retiroExitoso">
+      <p *ngIf="monto > saldoTotal" style="color: red; text-align: center;">Saldo insuficiente para el retiro.</p>
+      <p *ngIf="retiroExitoso && monto <= saldoTotal" style="color: green; text-align: center;">Retiro exitoso.</p>
     </div>
-    
+  
     <br>
-    <div class="form-group" *ngIf="accountDetails">
-      <label for="amount">Monto a retirar:</label>
-      <input type="number" id="amount" name="amount" [(ngModel)]="amount" required>
+    <div *ngIf="retiroExitoso">
+      <table>
+        <thead>
+          <tr>
+            <th>Número de cuenta</th>
+            <th>Tipo de cuenta</th>
+            <!-- <th>Saldo Disponible</th> -->
+            <th>Débito (USD)</th>
+            <th>Saldo (USD)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ accountDetails?.codeInternalAccount }}</td>
+            <td>{{ accountDetails?.name }}</td>
+            <!-- <td>{{ accountDetails?.availableBalance }}</td> -->
+            <td>{{ amount }}</td>
+            <td>{{ accountDetails?.availableBalance - amount }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-
-    <div class="form-group">
-      <label for="debtorAccount">Nro. de Cuenta a Debitar:</label>
-      <input type="text" id="debtorAccount" name="debtorAccount" [(ngModel)]="debtor_account" required>
-    </div>
-
-    <button type="submit" [disabled]="!form.valid || !accountDetails">Realizar retiro</button>
-  </form>
-
-  <div *ngIf="retiroExitoso">
-    <p *ngIf="monto > saldoTotal" style="color: red; text-align: center;">Saldo insuficiente para el retiro.</p>
-    <p *ngIf="retiroExitoso && monto <= saldoTotal" style="color: green; text-align: center;">Retiro exitoso.</p>
-  </div>
-
-  <br>
-  <div *ngIf="retiroExitoso">
-    <table>
-      <thead>
-        <tr>
-          <th>Número de cuenta</th>
-          <th>Tipo de cuenta</th>
-          <!-- <th>Saldo Disponible</th> -->
-          <th>Débito</th>
-          <th>Saldo</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>{{ accountDetails?.codeInternalAccount }}</td>
-          <td>{{ accountDetails?.name }}</td>
-          <!-- <td>{{ accountDetails?.availableBalance }}</td> -->
-          <td>{{ amount }}</td>
-          <td>{{ accountDetails?.availableBalance - amount }}</td>
-        </tr>
-      </tbody>
-    </table>
   </div>
 </div>
-
-
-
-
-

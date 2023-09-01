@@ -1,11 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Movimiento } from './movimiento.model';
-import { distance } from 'chroma-js';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { AccountsMockApi } from 'app/mock-api/common/accounts/api';
-import { accounts } from 'app/mock-api/common/accounts/data';
+import { Movimiento } from './movimiento.model';
 
 @Injectable({
   providedIn: 'root'
@@ -61,8 +58,13 @@ export class MovementsService {
     return this._http.get(`${this.baseURL}/accounts/account-internalcode/${accountInternalCode}`);
   }
 
-  movimientos(accountUK){
-    return this._http.get(`${this.baseURL}/transactions/history-transaction/${accountUK}`)
+  movimientos(accountUK:string,startDateRS:any | '',endDateRS:any | ''){
+    return this._http.get(`${this.baseURL}/transactions/history-transaction/${accountUK}`,{
+      params:{
+        startDate: startDateRS,
+        endDate: endDateRS
+      }
+    });
   }
   
 

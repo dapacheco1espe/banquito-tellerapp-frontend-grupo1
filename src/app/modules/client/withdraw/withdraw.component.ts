@@ -14,96 +14,110 @@
 
 // }
 
-
 import { Component } from '@angular/core';
+import { FuseAlertService } from '@fuse/components/alert';
+import { AccountRS } from './Models/AccountRS';
 import { WithdrawService } from './withdraw.service';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-withdraw',
-  templateUrl: './withdraw.component.html',
-  styleUrls: ['./withdraw.component.scss']
+    selector: 'app-withdraw',
+    templateUrl: './withdraw.component.html',
+    styleUrls: ['./withdraw.component.scss'],
 })
 export class WithdrawComponent {
-  cuentaId: number;
-  monto: number;
-  retiroExitoso: boolean = false;
-  mostrarMensaje: boolean = false; // Agrega la variable retiroIntentado
-  saldoTotal: number = 1000; // Saldo total de la cuenta (datos quemados para este ejemplo)
-  saldoRestante: number;
-  cuentaEncontrada: any;
-  accountInternalCode: string;
-  accountDetails: any;
-  amount: number;
-  debtor_account: string;
+    cuentaId: number;
+    monto: number;
+    retiroExitoso: boolean = false;
+    mostrarMensaje: boolean = false; // Agrega la variable retiroIntentado
+    saldoTotal: number = 1000; // Saldo total de la cuenta (datos quemados para este ejemplo)
+    saldoRestante: number;
+    cuentaEncontrada: any;
+    accountInternalCode: string;
+    accountDetails: AccountRS;
+    amount: number;
+    debtor_account: string;
 
+    constructor(
+        private withdrawService: WithdrawService,
+        private _alertService: FuseAlertService
+    ) {}
 
-  constructor(private withdrawService: WithdrawService, private http: HttpClient ) { }
-
-  realizarRetiro(): void {
-    if (this.accountDetails && this.amount > 0 && this.amount <= this.saldoTotal) {
-      console.log("----entra if")
-      const accountTransactionReqDto = {
-        debtorBankCode: "BANQ",
-        debtorAccount: this.debtor_account,
-        transactionType: "WHITDRAWL",
-        ammount: this.amount
-        // ... otros campos necesarios
-      };
-      console.log("----Quue pasa")
-
-      this.withdrawService.realizarRetiro(accountTransactionReqDto).subscribe(
-        response => {
-          console.log('Retiro exitoso:', response);
-          this.retiroExitoso = true;
-          this.saldoTotal -= this.amount;
-        },
-        error => {
-          console.error('Error en el retiro:', error);
-          this.retiroExitoso = false;
-        }
-      );
-    } else {
-      console.error('Cuenta inválida, monto incorrecto o saldo insuficiente.');
-    }
-  }
-  
-
-
-
-  // buscarCuenta() {
-  //   this.accountService.findAccountByAccountUK(this.cuentaId.toString())
-  //     .subscribe((cuentaEncontrada: any) => {
-  //       this.cuentaEncontrada = cuentaEncontrada;
-  //       if (this.cuentaEncontrada) {
-  //         console.log('Cuenta encontrada:', this.cuentaEncontrada);
-  //       } else {
-  //         console.log('Cuenta no encontrada.');
-  //       }
-  //     }, error => {
-  //       console.error('Error al buscar cuenta:', error);
-  //     });
-  // }
-
-  buscarCuentaPorInternalCode() {
-    this.withdrawService.findAccountByInternalCodeAccount(this.accountInternalCode)
-      .subscribe(accountDetails => {
-        if (accountDetails) {
-          this.accountDetails = accountDetails;
-          console.log('Detalles de la cuenta:', this.accountDetails);
+    realizarRetiro(): void {
+        if (
+            this.accountDetails &&
+            this.amount > 0 &&
+            this.amount <= this.saldoTotal
+        ) {
+            const accountTransactionReqDto = {
+                debtorBankCode: 'BANQ',
+                debtorAccount: this.accountDetails.codeInternalAccount,
+                transactionType: 'WHITDRAWL',
+                ammount: this.amount,
+                // ... otros campos necesarios
+            };
+            this.withdrawService
+                .realizarRetiro(accountTransactionReqDto)
+                .subscribe(
+                    (response) => {
+                        this.show('alertSuccess');
+                        this.retiroExitoso = true;
+                        this.saldoTotal -= this.amount;
+                    },
+                    (error) => {
+                        console.error('Error en el retiro:', error);
+                        this.retiroExitoso = false;
+                    }
+                );
         } else {
-          console.log('Cuenta no encontrada o falta la propiedad accountInternalCode.');
-          this.accountDetails = null;
+            console.error(
+                'Cuenta inválida, monto incorrecto o saldo insuficiente.'
+            );
         }
-      }, error => {
-        console.error('Error al buscar la cuenta:', error);
-        this.accountDetails = null;
-      });
-  }
+    }
+
+    public dismiss(name: string): void {
+        this._alertService.dismiss(name);
+    }
+
+    public show(name: string): void {
+        this._alertService.show(name);
+    }
+
+    // buscarCuenta() {
+    //   this.accountService.findAccountByAccountUK(this.cuentaId.toString())
+    //     .subscribe((cuentaEncontrada: any) => {
+    //       this.cuentaEncontrada = cuentaEncontrada;
+    //       if (this.cuentaEncontrada) {
+    //         console.log('Cuenta encontrada:', this.cuentaEncontrada);
+    //       } else {
+    //         console.log('Cuenta no encontrada.');
+    //       }
+    //     }, error => {
+    //       console.error('Error al buscar cuenta:', error);
+    //     });
+    // }
+
+    buscarCuentaPorInternalCode() {
+        this.withdrawService
+            .findAccountByInternalCodeAccount(this.accountInternalCode)
+            .subscribe(
+                (accountDetails) => {
+                    if (accountDetails) {
+                        this.accountDetails = accountDetails;
+                        this.saldoTotal = this.accountDetails.availableBalance;
+                        console.log(
+                            'Detalles de la cuenta:',
+                            this.accountDetails
+                        );
+                    } else {
+                        this.show('alertSearchAccount');
+                        this.accountDetails = null;
+                    }
+                },
+                (error) => {
+                  this.show('alertSearchAccountHttp');
+                    this.accountDetails = null;
+                }
+            );
+    }
 }
-      
-     
-
-
-

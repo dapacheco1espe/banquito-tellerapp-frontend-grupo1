@@ -10,61 +10,81 @@
     <div class="border-b"></div>
     <div class="flex flex-col sm:flex-row">
         <div class="w-full sm:w-1/2 flex flex-col py-6 px-10">
-            <!-- selector de busqueda -->
-            <div class="w-full flex flex-col gap-4 mb-8">
-                <form class="flex flex-col">
-                    <mat-label class="font-medium">Elige la forma de búsqueda para encontrar la cuenta que se va a utilizar en la transferencia</mat-label>
-                    <mat-chip-list aria-label="Fish selection" class="mt-4" #chipList >
-                        <!-- <mat-chip (click)="selectThisChip(0);">Cédula</mat-chip>
-                        <mat-chip (click)="selectThisChip(1);">RUC</mat-chip>
-                        <mat-chip (click)="selectThisChip(2);">Pasaporte</mat-chip> -->
-                        <mat-chip (click)="selectThisChip(0);">Cuenta</mat-chip>
-                    </mat-chip-list>
-                </form>
-            </div>
             <!-- busquedas por cuenta o por cedula -->
-            <form [formGroup]="formClient" class="w-full sm:w-1/2 flex flex-col  gap-4">
+            <form [formGroup]="formClientDebtor" class="w-full sm:w-1/2 flex flex-col  gap-4">
                 <div class="w-full self-center">
                     <mat-form-field class="w-full">
-                        <mat-label>Número de {{chipSelectedValue}} del cliente</mat-label>
+                        <mat-label>Número de cuenta  de origen</mat-label>
                         <input matInput type="text" [formControlName]="'accountNumber'">
                     </mat-form-field>
                     <mat-error
-                        *ngIf="formClient.get('accountNumber').errors?.['required'] && formClient.get('accountNumber').touched && formClient.get('accountNumber').value ==''">
+                        *ngIf="formClientDebtor.get('accountNumber').errors?.['required'] && formClientDebtor.get('accountNumber').touched && formClientDebtor.get('accountNumber').value ==''">
                         El número de cuenta es obligatorio para continuar.
                     </mat-error>
-                    <mat-error *ngIf="formClient.get('accountNumber').errors?.['pattern']">
+                    <mat-error *ngIf="formClientDebtor.get('accountNumber').errors?.['pattern']">
                         La cuenta ingresada solo puede tener números, no puede tener letras ni otros símbolos.
                     </mat-error>
                 </div>
-                <button [disabled]="formClient.get('accountNumber').invalid || !this.chipSelectedValue" mat-flat-button color="primary"
-                    class="w-full sm:w-1/3" (click)="getAccounts();">Buscar</button>
+                <button [disabled]="formClientDebtor.get('accountNumber').invalid " mat-flat-button color="primary"
+                    class="w-full sm:w-auto" (click)="getAccounts('debtor');">Validar Cuenta</button>
+            </form>
+        </div>
+        
+        <div class="w-full sm:w-1/2 flex flex-col py-6 px-10">
+            <div class="slider w-full h-64 flex gap-5 overflow-x-scroll">
+                <ng-container *ngIf="accountsDebtor != null">
+                    <div [id]="'card-'+0" class="w-full h-56 flex flex-col border rounded-md p-8"  style="flex: 0 0 100%">
+                        <h2 class="text-2xl font-bold mb-4 text-center">Nro. Cuenta {{accountsDebtor.codeInternalAccount}}</h2>
+                        <div class="flex flex-col gap-3">
+                            <div class="flex flex-row justify-between">
+                                <span class="font-semibold text-center">Tipo de cuenta</span>
+                                <span class="text-center">{{accountsDebtor.name}}</span>
+                            </div>
+                            <div class="flex flex-row justify-between">
+                                <span class="font-semibold text-center">Saldo actual de la cuenta</span>
+                                <span class="text-center">$ {{accountsDebtor.availableBalance}} USD</span>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+        
+    </div>
+    <div class="border-b w-full"></div>
+    <div class="flex flex-col sm:flex-row">
+        <div class="w-full sm:w-1/2 flex flex-col py-6 px-10">
+            <!-- busquedas por cuenta o por cedula -->
+            <form [formGroup]="formClientCreditor" class="w-full sm:w-1/2 flex flex-col  gap-4">
+                <div class="w-full self-center">
+                    <mat-form-field class="w-full">
+                        <mat-label>Número de cuenta de destino</mat-label>
+                        <input matInput type="text" [formControlName]="'accountNumber'">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="formClientCreditor.get('accountNumber').errors?.['required'] && formClientCreditor.get('accountNumber').touched && formClientCreditor.get('accountNumber').value ==''">
+                        El número de cuenta es obligatorio para continuar.
+                    </mat-error>
+                    <mat-error *ngIf="formClientCreditor.get('accountNumber').errors?.['pattern']">
+                        La cuenta ingresada solo puede tener números, no puede tener letras ni otros símbolos.
+                    </mat-error>
+                </div>
+                <button [disabled]="formClientCreditor.get('accountNumber').invalid " mat-flat-button color="primary"
+                    class="w-full sm:w-auto " (click)="getAccounts('credtor');">Validar Cuenta</button>
             </form>
         </div>
         <div class="w-full sm:w-1/2 flex flex-col py-6 px-10">
             <div class="slider w-full h-64 flex gap-5 overflow-x-scroll">
-                <ng-container *ngIf="(accounts$ | async) as accounts">
-                    <div [id]="'card-'+i" *ngFor="let account of accounts; index as i" class="w-full h-56 flex flex-col border rounded-md p-8"  style="flex: 0 0 100%">
-                        <h2 class="text-2xl font-bold mb-4 text-center">Nro. Cuenta {{account.codeInternalAccount}}</h2>
+                <ng-container *ngIf="creditorAcc !=null">
+                    <div [id]="'card-'+0" class="w-full h-56 flex flex-col border rounded-md p-8"  style="flex: 0 0 100%">
+                        <h2 class="text-2xl font-bold mb-4 text-center">Datos de la cuenta destino</h2>
+                        <h2 class="text-xl font-semibold mb-4 text-center">Nro. Cuenta {{creditorAcc.codeInternalAccount}}</h2>
                         <div class="flex flex-col gap-3">
-                            <!-- <div class="flex flex-row justify-between">
-                                <span class="font-semibold text-center">Propietario: </span>
-                                <span class="text-center">{{account.accountClientData.name + '' + account.accountClientData.lastname}}</span>
-                            </div>
-                            <div class="flex flex-row justify-between">
-                                <span class="font-semibold text-center">Identificacion</span>
-                                <span class="text-center">{{account.accountClientData.identification}}</span>
-                            </div> -->
                             <div class="flex flex-row justify-between">
                                 <span class="font-semibold text-center">Tipo de cuenta</span>
-                                <span class="text-center">{{account.name}}</span>
-                            </div>
-                            <div class="flex flex-row justify-between">
-                                <span class="font-semibold text-center">Saldo actual de la cuenta</span>
-                                <span class="text-center">$ {{account.availableBalance}} USD</span>
+                                <span class="text-center">{{creditorAcc.name}}</span>
                             </div>
                         </div>
-                        <button (click)="selectThisAccount(account,i);" mat-flat-button color="primary">Elegir cuenta</button>
                     </div>
                 </ng-container>
             </div>
@@ -72,7 +92,7 @@
         
     </div>
     <div class="w-full flex flex-col items-center gap-6">
-        <h2 class="text-xl font-bold">Ingrese el monto a depositar en la cuenta</h2>
+        <h2 class="text-xl font-bold">Ingrese el monto a transferir</h2>
         <form [formGroup]="amountForm" class="w-full sm:w-1/2 flex flex-col  gap-4">
             <div class="w-full self-center">
                 <mat-form-field class="w-full">
@@ -86,7 +106,7 @@
                     Solo se puede realizar transferencias a partir de $ 1.00 USD
                 </mat-error>
             </div>
-            <button [disabled]="amountForm.get('amount').invalid || !this.chipSelectedValue" mat-flat-button color="primary"
+            <button [disabled]="amountForm.get('amount').invalid " mat-flat-button color="primary"
                 class="w-full sm:w-1/3 self-center" (click)="transferToDestinyAccount();">Transferir</button>
         </form>
     </div>

@@ -1,14 +1,15 @@
 import { NgModule } from '@angular/core';
 
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { SharedModule } from 'app/shared/shared.module';
 import { MovementsRoutingModule } from './movements-routing.module';
 import { MovementsComponent } from './movements.component';
-import { SharedModule } from 'app/shared/shared.module';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
-import { HttpClientModule } from '@angular/common/http';
 import { MovementsService } from './movements.service';
-
 @NgModule({
   declarations: [
     MovementsComponent
@@ -20,7 +21,11 @@ import { MovementsService } from './movements.service';
     MatFormFieldModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    MatNativeDateModule,
   ],
   providers: [
     MovementsService

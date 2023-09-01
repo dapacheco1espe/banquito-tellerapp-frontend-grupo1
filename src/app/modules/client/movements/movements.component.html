@@ -10,7 +10,16 @@
     <label for="numeroCuenta" class="block text-gray-700 font-bold mb-1">Número de cuenta:</label>
     <input type="text" id="numeroCuenta" name="numeroCuenta" [(ngModel)]="numeroCuenta" required class="px-4 py-2 border border-gray-300 rounded">
   </div>
-  <div class="mb-4">
+  <mat-form-field class="w-full">
+    <mat-label>Elija una fecha de inicio y fin</mat-label>
+  <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+    <input matStartDate formControlName="start" placeholder="Start date">
+    <input matEndDate formControlName="end" placeholder="End date">
+  </mat-date-range-input>
+  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-date-range-picker #picker></mat-date-range-picker>
+  </mat-form-field>
+  <!-- <div class="mb-4">
     <br><label for="fechaInicio" class="block text-gray-700 font-bold mb-1">Fecha de inicio:</label>
     <input type="date" id="fechaInicio" name="fechaInicio" [(ngModel)]="fechaInicio" required
       class="px-4 py-2 border border-gray-300 rounded">
@@ -19,7 +28,7 @@
     <label for="fechaFin" class="block text-gray-700 font-bold mb-1">Fecha de fin:</label>
     <input type="date" id="fechaFin" name="fechaFin" [(ngModel)]="fechaFin" required
       class="px-4 py-2 border border-gray-300 rounded">
-  </div>
+  </div> -->
   <button type="submit" class="px-4 py-2 bg-blue-500 text-white font-bold rounded" (click)="realizarConsulta()">Consultar Movimientos</button>
 
   
@@ -37,20 +46,22 @@
   <table>
     <thead>
       <tr>
+        <th>Fecha</th>
         <th>Concepto</th>
-        <th>Tipo</th>
-        <th>Monto</th>
-        <th>Fecha de Creación</th>
-        <th>Fecha de Registro</th>
+        <th>Nro. Cuenta</th>
+        <th>Débito</th>
+        <th>Crédito</th>
+        <th>Saldo</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let movimiento of movimientos">
-        <td>{{ movimiento.notes }}</td>
+        <td>{{ movimiento.valueDate.split("T")[0] }}</td> 
+        <td>{{ movimiento.notes == '' ? 'Transferencia Bancaria ': movimiento.notes }}</td>
         <td>{{ movimiento.debtorAccount }}</td>
-        <td>{{ movimiento.ammount }}</td>
-        <td>{{ movimiento.valueDate }}</td>
-        <td>{{ movimiento.creationDate }}</td>
+        <td>{{ movimiento.transactionType == 'WITHDRAWAL' || movimiento.ammount<0  ? (-1)*movimiento.ammount : 0.00 }}</td>
+        <td>{{ movimiento.transactionType != 'WITHDRAWAL' && movimiento.ammount>0 ? movimiento.ammount : 0.00 }}</td>
+        <td>{{movimiento.balanceAfterTransaction}}</td>
       </tr>
     </tbody>
   </table>

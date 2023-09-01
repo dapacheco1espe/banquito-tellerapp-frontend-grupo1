@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'environments/environment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Account } from '../Models/Account';
-import { environment } from 'environments/environment';
+import { Transaction } from '../transferences/Models/Transaction';
 
 @Injectable({
   providedIn: 'root'
@@ -30,16 +31,7 @@ export class TransferencesService {
     );
   }
 
-  public generateTransference(account:Account,amount:number):Observable<any>{
-    return this._http.post(`${this._baseURL}/transactions/transaction`,{
-      id                : account.id,
-      reference         : 'ATM BANCO',
-      creditorBankCode  : '',
-      debtorBankCode    : account.codeInternalAccount,
-      debtorAccount     : account.codeInternalAccount,
-      transactionType   : 'TRANSFER',
-      notes             : 'TRX',
-      ammount           : amount,
-    });
+  public generateTransference(transaction:Transaction,amount:number):Observable<any>{
+    return this._http.post(`${this._baseURL}/transactions/transaction`,transaction);
   }
 }
