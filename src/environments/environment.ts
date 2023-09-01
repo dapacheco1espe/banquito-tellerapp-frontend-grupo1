@@ -4,8 +4,8 @@
 
 export const environment = {
     production: false,
-    baseURL: 'https://banquito-accounts-try5-zsorzzk5da-uc.a.run.app/api/v1',
-    //baseURL: 'http://localhost:9050/api/v1',
+    baseURL: 'https://arquitectura-1sa89r3l.uc.gateway.dev/api/v1',
+    //baseURL: 'http://localhost:8080/api/v1',
 };
 
 /*

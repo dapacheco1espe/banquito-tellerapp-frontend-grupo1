@@ -29,9 +29,15 @@
 
     </div>
     
+    <br>
     <div class="form-group" *ngIf="accountDetails">
       <label for="amount">Monto a retirar:</label>
       <input type="number" id="amount" name="amount" [(ngModel)]="amount" required>
+    </div>
+
+    <div class="form-group">
+      <label for="debtorAccount">Nro. de Cuenta a Debitar:</label>
+      <input type="text" id="debtorAccount" name="debtorAccount" [(ngModel)]="debtor_account" required>
     </div>
 
     <button type="submit" [disabled]="!form.valid || !accountDetails">Realizar retiro</button>
@@ -42,18 +48,25 @@
     <p *ngIf="retiroExitoso && monto <= saldoTotal" style="color: green; text-align: center;">Retiro exitoso.</p>
   </div>
 
+  <br>
   <div *ngIf="retiroExitoso">
     <table>
       <thead>
         <tr>
           <th>Número de cuenta</th>
-          <th>Saldo Total</th>
+          <th>Tipo de cuenta</th>
+          <!-- <th>Saldo Disponible</th> -->
+          <th>Débito</th>
+          <th>Saldo</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>{{ accountDetails?.codeInternalAccount }}</td>
-          <td>{{ accountDetails?.availableBalance - monto }}</td>
+          <td>{{ accountDetails?.name }}</td>
+          <!-- <td>{{ accountDetails?.availableBalance }}</td> -->
+          <td>{{ amount }}</td>
+          <td>{{ accountDetails?.availableBalance - amount }}</td>
         </tr>
       </tbody>
     </table>

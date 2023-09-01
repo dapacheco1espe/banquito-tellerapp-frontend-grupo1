@@ -36,19 +36,22 @@ export class WithdrawComponent {
   accountInternalCode: string;
   accountDetails: any;
   amount: number;
+  debtor_account: string;
 
 
   constructor(private withdrawService: WithdrawService, private http: HttpClient ) { }
 
   realizarRetiro(): void {
     if (this.accountDetails && this.amount > 0 && this.amount <= this.saldoTotal) {
+      console.log("----entra if")
       const accountTransactionReqDto = {
-        debtorAccount: this.accountInternalCode,
-        creditorAccount: 'YOUR_BANK_CODE', // Cambia esto por el código de tu banco
-        transactionType: 'TRANSFER',
-        ammount: this.amount,
+        debtorBankCode: "BANQ",
+        debtorAccount: this.debtor_account,
+        transactionType: "WHITDRAWL",
+        ammount: this.amount
         // ... otros campos necesarios
       };
+      console.log("----Quue pasa")
 
       this.withdrawService.realizarRetiro(accountTransactionReqDto).subscribe(
         response => {
