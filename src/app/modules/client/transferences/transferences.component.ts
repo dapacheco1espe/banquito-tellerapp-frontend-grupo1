@@ -5,6 +5,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { FuseConfirmationDialogComponent } from '@fuse/services/confirmation/dialog/dialog.component';
 import { Account } from '../Models/Account';
+import { BalanceService } from '../services/balance.service';
 import { TransferencesService } from '../services/transferences.service';
 import { Transaction } from './Models/Transaction';
 
@@ -21,8 +22,17 @@ export class TransferencesComponent implements OnInit, AfterViewInit {
   public chipSelectedValue : string = '';
   public accountsDebtor:Account;
   public creditorAcc:Account;
+  public creditorData:{
+    firstName:string,
+    lastName:string,
+    documentId:string,
+  } = {
+    firstName:'',
+    lastName: '',
+    documentId:'',
+  };
   constructor(private _formBuilder:FormBuilder, private _changeDetectorRef:ChangeDetectorRef,
-    private _transferencesService:TransferencesService, private _fuseConfirmationService:FuseConfirmationService) { }
+    private _transferencesService:TransferencesService, private _balanceService:BalanceService, private _fuseConfirmationService:FuseConfirmationService) { }
   ngOnInit(): void {
     this.formClientDebtor = this._formBuilder.group({
       accountNumber: ['',[Validators.required]],
@@ -51,8 +61,17 @@ export class TransferencesComponent implements OnInit, AfterViewInit {
       next:(response)=>{
         if(type == 'credtor'){
           this.creditorAcc = response;
+          this._balanceService.findClientInfo(this.creditorAcc.clientUk).subscribe({
+            next:(client)=>{
+              this.creditorData.firstName = client.firstName;
+              this.creditorData.lastName = client.lastName;
+              this.creditorData.documentId = client.documentId;
+              this._changeDetectorRef.markForCheck();
+            }
+          });
         }else{
           this.accountsDebtor = response;
+          
         }
       },
       error:(err:HttpErrorResponse) =>{

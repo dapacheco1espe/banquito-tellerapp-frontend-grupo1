@@ -1,5 +1,5 @@
 export const environment = {
     production: true,
-    //baseURL: 'https://banquito-accounts-try-production.up.railway.app/api/v1',
-    baseURL: 'http://localhost:9050/api/v1',
+    baseURL: 'https://arquitectura-1sa89r3l.uc.gateway.dev/api/v1',
+    clientURL:'https://arquitectura-1sa89r3l.uc.gateway.dev/api/v2'
 };

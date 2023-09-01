@@ -32,4 +32,8 @@ export class BalanceService {
       })
     );
   }
+
+  public findClientInfo(clientUK:string):Observable<any>{
+    return this._http.get(`${environment.clientURL}/clients/${clientUK}`);
+  }
 }

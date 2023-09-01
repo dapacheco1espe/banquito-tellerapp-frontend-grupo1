@@ -35,7 +35,15 @@ export class BalanceComponent implements OnInit, OnDestroy {
     private _exportAsService:ExportAsService) {
       
     }
-
+  public clientData:{
+    firstName:string,
+    lastName:string,
+    documentId:string,
+  } = {
+    firstName:'',
+    lastName: '',
+    documentId:'',
+  };
   ngOnInit(): void {
     this.formClient = this._formBuilder.group({
       //accountNumber: ['',[Validators.required, Validators.pattern(this._REGEXNUMBERS)]],
@@ -58,6 +66,14 @@ export class BalanceComponent implements OnInit, OnDestroy {
     .subscribe({
       next:(account:Account)=>{
         this._account = {...account};
+        this._balanceService.findClientInfo(this._account.clientUk).subscribe({
+          next:(client)=>{
+            this.clientData.firstName = client.firstName;
+            this.clientData.lastName = client.lastName;
+            this.clientData.documentId = client.documentId;
+            this._changeDetectorRef.markForCheck();
+          }
+        });
         this._changeDetectorRef.markForCheck();
       },
       error:(error:HttpErrorResponse) => {
