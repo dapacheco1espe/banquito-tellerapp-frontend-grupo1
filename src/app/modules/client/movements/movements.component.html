@@ -1,12 +1,14 @@
 <!--<p>movements works!</p>-->
 
-<h1 class="text-2xl font-bold mb-4">Consulta de Movimientos</h1><br>
 
+<div class="withdraw-container">
+  
 <form class="mb-8" (ngSubmit)="realizarConsulta()">
+  <h1 class="text-2xl font-bold mb-4" style="text-align: center;">Consulta de Movimientos</h1><br><br>
+
   <div class="">
-    <br><br><label for="numeroCuenta" class="block text-gray-700 font-bold mb-1">Número de cuenta:</label>
-    <input type="text" id="numeroCuenta" name="numeroCuenta" [(ngModel)]="numeroCuenta" required
-      class="px-4 py-2 border border-gray-300 rounded">
+    <label for="numeroCuenta" class="block text-gray-700 font-bold mb-1">Número de cuenta:</label>
+    <input type="text" id="numeroCuenta" name="numeroCuenta" [(ngModel)]="numeroCuenta" required class="px-4 py-2 border border-gray-300 rounded">
   </div>
   <div class="mb-4">
     <br><label for="fechaInicio" class="block text-gray-700 font-bold mb-1">Fecha de inicio:</label>
@@ -28,30 +30,31 @@
   <p>{{ errorFecha }}</p>
 </div>
 
+<br>
 <!-- Mostrar el formulario de detalles de movimientos si se ha realizado una consulta -->
-<form class="mb-8">
-  <div *ngIf="mostrarDesglose">
-    <br><br><br><h2>Resultados de la consulta:</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Concepto</th>
-          <th>Tipo</th>
-          <th>Monto</th>
-          <th>Fecha de Creación</th>
-          <th>Fecha de Registro</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let movimiento of movimientos">
-          <td>{{ movimiento.id }}</td>
-          <td>{{ movimiento.fecha }}</td>
-          <td>{{ movimiento.descripcion }}</td>
-          <td>{{ movimiento.monto }}</td>
-          <td>{{ movimiento.saldoActual }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div> 
-</form>
+<div *ngIf="mostrarDesglose">
+  <h2>Últimos Movimientos</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Concepto</th>
+        <th>Tipo</th>
+        <th>Monto</th>
+        <th>Fecha de Creación</th>
+        <th>Fecha de Registro</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let movimiento of movimientos">
+        <td>{{ movimiento.notes }}</td>
+        <td>{{ movimiento.debtorAccount }}</td>
+        <td>{{ movimiento.ammount }}</td>
+        <td>{{ movimiento.valueDate }}</td>
+        <td>{{ movimiento.creationDate }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <br><br>
+</div>
+</div>
 

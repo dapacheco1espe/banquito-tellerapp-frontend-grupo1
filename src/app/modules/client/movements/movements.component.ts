@@ -25,16 +25,25 @@ export class MovementsComponent {
       this.errorFecha = 'Por favor, completa todos los campos.';
       return;
     }
-
-
-    // Realizar la consulta de movimientos filtrados según las fechas
-    this.movimientos = this.movementsService.obtenerMovimientosMock(this.fechaInicio, this.fechaFin);
-    this.calcularSaldoActual();
-    this.mostrarDesglose = true;
-    this.formValid = true;
-    this.errorFecha = '';
-    
+  
+    this.movementsService.findAccountByInternalCodeAccount(this.numeroCuenta).subscribe({
+      next: (response: any) => {
+        this.movementsService.movimientos(response?.uniqueKey).subscribe({
+          next: (responseMov: any) => {
+            this.movimientos = responseMov; 
+            this.mostrarDesglose = true; 
+          },
+          error: (error: any) => {
+            console.error('Error al obtener movimientos:', error);
+          }
+        });
+      },
+      error: (error: any) => {
+        console.error('Error al encontrar la cuenta:', error);
+      }
+    });
   }
+  
 
   private calcularSaldoActual(): void {
     let saldoActual = 0;

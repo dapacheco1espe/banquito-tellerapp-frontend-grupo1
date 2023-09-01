@@ -1,8 +1,10 @@
 /* Estilos para el contenedor principal */
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px transparent #ccc;
+  border-radius: 8px;
   }
   
   /* Estilos para el formulario */

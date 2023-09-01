@@ -4,6 +4,8 @@ import { distance } from 'chroma-js';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { AccountsMockApi } from 'app/mock-api/common/accounts/api';
+import { accounts } from 'app/mock-api/common/accounts/data';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +31,8 @@ export class MovementsService {
       // Agrega más datos simulados si es necesario
     ];
 
+  
+
     // Calcular el saldo total
     let saldoTotal = 0;
     for (const movimiento of movimientosMock) {
@@ -52,5 +56,14 @@ export class MovementsService {
 
     return movimientosFiltrados;
   }
+
+  findAccountByInternalCodeAccount(accountInternalCode: string) {
+    return this._http.get(`${this.baseURL}/accounts/account-internalcode/${accountInternalCode}`);
+  }
+
+  movimientos(accountUK){
+    return this._http.get(`${this.baseURL}/transactions/history-transaction/${accountUK}`)
+  }
+  
 
 }
