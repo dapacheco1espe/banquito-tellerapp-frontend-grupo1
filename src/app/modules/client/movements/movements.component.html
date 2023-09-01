@@ -1,25 +1,44 @@
-<!--<p>movements works!</p>-->
+<div class="withdraw-container bg-white w-full flex flex-col">
+  <fuse-alert [type]="'warn'"  [dismissible]="true"
+  [dismissed]="true"
+  [name]="'alertMovements'" class="absolute bottom-0 right-0">
+    <span fuseAlertTitle>Error al obtener movimientos</span>
+    No se pudo obtener movimientos para la cuenta y fechas seleccionadas
+</fuse-alert>
+<fuse-alert [type]="'warn'"  [dismissible]="true"
+  [dismissed]="true"
+  [name]="'alertAccount'" class="absolute bottom-0 right-0">
+    <span fuseAlertTitle>Error al obtener cuenta</span>
+    No se pudo obtener datos con la cuenta proporcionada
+</fuse-alert>
+  <main class="p-4 px-10">
+    <h2 class="font-bold text-3xl">Transferencias</h2>
+    <div class="text-md flex flex-row gap-3">
+        <a routerLink="/" class="text-primary">Teller App</a>
+        <span>/</span>
+        <a routerLink="/client/transferences" class="text-gray-400">Transferencias</a>
+    </div>
+</main>
+<div class="border-b w-full"></div>
+  <form class="mb-8 w-full flex flex-col sm:w-1/2 items-center mx-auto mt-4" (ngSubmit)="realizarConsulta()">
 
+    
+    <mat-form-field class="w-full">
+      <mat-label class="block text-gray-700 font-bold mb-1">Número de cuenta:</mat-label>
+      <input type="text" matInput id="numeroCuenta" name="numeroCuenta" [(ngModel)]="numeroCuenta" 
+        class="px-4 py-2 border border-gray-300 rounded">
+    </mat-form-field>
 
-<div class="withdraw-container">
-  
-<form class="mb-8" (ngSubmit)="realizarConsulta()">
-  <h1 class="text-2xl font-bold mb-4" style="text-align: center;">Consulta de Movimientos</h1><br><br>
-
-  <div class="">
-    <label for="numeroCuenta" class="block text-gray-700 font-bold mb-1">Número de cuenta:</label>
-    <input type="text" id="numeroCuenta" name="numeroCuenta" [(ngModel)]="numeroCuenta" required class="px-4 py-2 border border-gray-300 rounded">
-  </div>
-  <mat-form-field class="w-full">
-    <mat-label>Elija una fecha de inicio y fin</mat-label>
-  <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
-    <input matStartDate formControlName="start" placeholder="Start date">
-    <input matEndDate formControlName="end" placeholder="End date">
-  </mat-date-range-input>
-  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-  <mat-date-range-picker #picker></mat-date-range-picker>
-  </mat-form-field>
-  <!-- <div class="mb-4">
+    <mat-form-field class="w-full">
+      <mat-label>Elija una fecha de inicio y fin</mat-label>
+      <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+        <input matStartDate formControlName="start" placeholder="Start date">
+        <input matEndDate formControlName="end" placeholder="End date">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+    <!-- <div class="mb-4">
     <br><label for="fechaInicio" class="block text-gray-700 font-bold mb-1">Fecha de inicio:</label>
     <input type="date" id="fechaInicio" name="fechaInicio" [(ngModel)]="fechaInicio" required
       class="px-4 py-2 border border-gray-300 rounded">
@@ -29,43 +48,44 @@
     <input type="date" id="fechaFin" name="fechaFin" [(ngModel)]="fechaFin" required
       class="px-4 py-2 border border-gray-300 rounded">
   </div> -->
-  <button type="submit" class="px-4 py-2 bg-blue-500 text-white font-bold rounded" (click)="realizarConsulta()">Consultar Movimientos</button>
+    <button type="submit" class="px-4 py-2 bg-blue-500 text-white font-bold rounded"
+      (click)="realizarConsulta()">Consultar Movimientos</button>
 
-  
-</form>
 
-<!-- Mostrar mensaje de error -->
-<div *ngIf="!formValid" class="error-message">
-  <p>{{ errorFecha }}</p>
+  </form>
+
+  <!-- Mostrar mensaje de error -->
+  <div *ngIf="!formValid" class="error-message">
+    <p>{{ errorFecha }}</p>
+  </div>
+
+  <br>
+  <!-- Mostrar el formulario de detalles de movimientos si se ha realizado una consulta -->
+  <div *ngIf="mostrarDesglose" class="px-4">
+    <h2 class="font-semibold text-xl">Últimos Movimientos</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Concepto</th>
+          <th>Nro. Cuenta</th>
+          <th>Débito</th>
+          <th>Crédito</th>
+          <th>Saldo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let movimiento of movimientos">
+          <td>{{ movimiento.valueDate.split("T")[0] }}</td>
+          <td>{{ movimiento.notes == '' ? 'Transferencia Bancaria ': movimiento.notes }}</td>
+          <td>{{ movimiento.debtorAccount }}</td>
+          <td>{{ movimiento.transactionType == 'WITHDRAWAL' || movimiento.ammount<0 ? (movimiento.ammount < 0 ? (-1)*movimiento.ammount : movimiento.ammount) : 0.00
+              }}</td>
+          <td>{{ movimiento.transactionType != 'WITHDRAWAL' && movimiento.ammount>0 ? movimiento.ammount : 0.00 }}</td>
+          <td>{{movimiento.balanceAfterTransaction}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <br><br>
+  </div>
 </div>
-
-<br>
-<!-- Mostrar el formulario de detalles de movimientos si se ha realizado una consulta -->
-<div *ngIf="mostrarDesglose">
-  <h2>Últimos Movimientos</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Fecha</th>
-        <th>Concepto</th>
-        <th>Nro. Cuenta</th>
-        <th>Débito</th>
-        <th>Crédito</th>
-        <th>Saldo</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let movimiento of movimientos">
-        <td>{{ movimiento.valueDate.split("T")[0] }}</td> 
-        <td>{{ movimiento.notes == '' ? 'Transferencia Bancaria ': movimiento.notes }}</td>
-        <td>{{ movimiento.debtorAccount }}</td>
-        <td>{{ movimiento.transactionType == 'WITHDRAWAL' || movimiento.ammount<0  ? (-1)*movimiento.ammount : 0.00 }}</td>
-        <td>{{ movimiento.transactionType != 'WITHDRAWAL' && movimiento.ammount>0 ? movimiento.ammount : 0.00 }}</td>
-        <td>{{movimiento.balanceAfterTransaction}}</td>
-      </tr>
-    </tbody>
-  </table>
-  <br><br>
-</div>
-</div>
-
