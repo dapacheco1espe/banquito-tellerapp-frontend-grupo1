@@ -5,7 +5,8 @@
 export const environment = {
     production: false,
     baseURL: 'https://arquitectura-1sa89r3l.uc.gateway.dev/api/v1',
-    clientURL:'https://arquitectura-1sa89r3l.uc.gateway.dev/api/v2'
+    clientURL:'https://arquitectura-1sa89r3l.uc.gateway.dev/api/v2',
+    urlLogin:'http://localhost:8080/login',
     //baseURL: 'http://localhost:8080/api/v1',
 };
 
